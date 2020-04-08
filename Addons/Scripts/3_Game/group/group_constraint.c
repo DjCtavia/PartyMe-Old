@@ -2,12 +2,12 @@
  * Define rules of constraint applied to a group
  * and UI in general. 
 */
-class PM_group_constraint
+class PM_Group_Constraint
 {
     int max_player_number_in_group = 5;
     bool can_use_hud = true;
 
-    void PM_group_constraint()
+    void PM_Group_Constraint()
     {
         GetRPCManager().AddRPC("PartyMe", "UpdateServerConstraint", this, SingleplayerExecutionType.Both); 
     }
@@ -36,12 +36,12 @@ class PM_group_constraint
     }
 };
 
-static ref PM_group_constraint g_PM_group_constraint;
-static ref PM_group_constraint PM_GetGroupConstraint()
+static ref PM_Group_Constraint g_PM_group_constraint;
+static ref PM_Group_Constraint PM_GetGroupConstraint()
 {
     if (!g_PM_group_constraint)
     {
-        g_PM_group_constraint = new PM_group_constraint();
+        g_PM_group_constraint = new PM_Group_Constraint();
     }
     return g_PM_group_constraint;
 }

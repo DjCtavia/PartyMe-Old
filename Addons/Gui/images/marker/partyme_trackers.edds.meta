@@ -1,0 +1,18 @@
+MetaFileClass {
+ Name "{69BB6A30EEF58219}partyme/gui/images/tracker/partyme_trackers.edds"
+ Author "djctavia-pc"
+ ChangeDate 556934857
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "partyme_trackers.tga"
+   FormatCompress Best
+   TiledTexture 0
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

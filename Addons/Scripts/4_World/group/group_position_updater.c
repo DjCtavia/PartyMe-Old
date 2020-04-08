@@ -18,28 +18,30 @@ class PM_Group_Position_Updater
     void Update()
     {
         ref PM_Group group = PM_GetGroup();
-        Man playerSelected;
+        ref Man playerSelected;
 
         for (int playerIndex = 0; playerIndex < ClientData.m_PlayerBaseList.Count(); playerIndex++)
         {
             playerSelected = ClientData.m_PlayerBaseList.Get(playerIndex);
-            PlayerIdentity pIdentity;
+            ref PlayerIdentity pIdentity;
             if (playerSelected)
             {
                 pIdentity = playerSelected.GetIdentity();
-                UpdatePlayerInfos(playerSelected, pIdentity);
+                UpdatePlayerInfos(playerSelected, pIdentity, group);
             }
         }
     }
 
-    void UpdatePlayerInfos(Man playerSelected, PlayerIdentity pIdentity)
+    void UpdatePlayerInfos(ref Man playerSelected, ref PlayerIdentity pIdentity, ref PM_Group group)
     {
         if (!pIdentity) return;
-        ref PM_Player_Infos_t pInfos = group.Get(pIdentity.GetId());
+        ref PM_Player_Infos_t pInfos = group.players.Get(pIdentity.GetId());
 
         if (pInfos)
         {
-            pInfos.position = playerSelected.GetPosition();
+            MiscGameplayFunctions.GetHeadBonePos(playerSelected, pInfos.position);
+            pInfos.position += "0 0.3 0";
+            pInfos.w_marker.UpdateFromPlayerInfoStruct(pInfos);
         }
     }
 };

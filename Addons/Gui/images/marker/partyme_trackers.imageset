@@ -1,0 +1,26 @@
+ImageSetClass {
+ Name "partyme_trackers"
+ RefSize 512 256
+ Textures {
+  ImageSetTextureClass {
+   mpix 1
+   path "{69BB6A30EEF58219}partyme/gui/images/tracker/partyme_trackers.edds"
+  }
+ }
+ Images {
+  ImageSetDefClass mid {
+   Name "mid"
+   Pos 0 0
+   Size 256 256
+   Flags 0
+  }
+  ImageSetDefClass long {
+   Name "long"
+   Pos 256 0
+   Size 256 256
+   Flags 0
+  }
+ }
+ Groups {
+ }
+}

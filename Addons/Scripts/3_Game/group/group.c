@@ -7,7 +7,7 @@ class PM_Group
     bool isLeader = true;
     ref map<string, ref PM_Player_Infos_t> players;
 
-    void PM_group()
+    void PM_Group()
     {
         players = new map<string, ref PM_Player_Infos_t>;
     }
@@ -29,13 +29,16 @@ class PM_Group
     // Add new player to group
     bool AddPlayer(string id, string name, vector position, float health)
     {
+        Print("[AddPlayer] " + players.ToString());
         if (players && !players.Contains(id))
         {
             ref PM_Player_Infos_t member = new PM_Player_Infos_t();
             member.name = name;
             member.position = position;
             member.health = health;
+            member.w_marker = new PM_Marker_Widget();
             players.Set(id, member);
+            Print("Joueur crée" + players.ToString());
             return true;
         }
         return false;

@@ -1,0 +1,18 @@
+MetaFileClass {
+ Name "{18041998EC79871C}gui/imagesets/partyme_leader.edds"
+ Author "djctavia-pc"
+ ChangeDate 1502258858
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "partyme_leader.tga"
+   FormatCompress Best
+   TiledTexture 0
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

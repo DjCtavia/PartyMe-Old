@@ -5,13 +5,13 @@
  *      Anyone who want a custom tracker from scratch should modify
  *      this class.
 */
-class PM_marker_ui
+class PM_Marker_Widget
 {
     ref Widget w_root;
     ref ImageWidget i_logo;
     ref TextWidget t_playerName;
 
-    void PM_marker_ui()
+    void PM_Marker_Widget()
     {
         InitRoot();
         InitWidgets();
@@ -20,7 +20,7 @@ class PM_marker_ui
     // We're loading the layout of marker in this method
     void InitRoot()
     {
-        w_root = GetGame().GetWorkspace().CreateWidgets("partyme/gui/layouts/tracker.layout");
+        w_root = GetGame().GetWorkspace().CreateWidgets("partyme/gui/layouts/marker.layout");
     }
 
     // We're creating widget references here based on Widger 'w_root'.
@@ -43,10 +43,10 @@ class PM_marker_ui
     private void UpdateVisualPositioning(vector newPosition)
     {
         float widgetWidth, widgetHeight;
-        vector screenPosition = GetGame().GetScreenPos(position);
+        vector screenPosition = GetGame().GetScreenPos(newPosition);
 
         w_root.GetScreenSize(widgetWidth, widgetHeight);
-        if (IsMarkerVisibleOnScreen(newPosition))
+        if (!IsMarkerVisibleOnScreen(newPosition))
             return;
         w_root.SetPos(screenPosition[0] - (widgetWidth / 2), screenPosition[1] - widgetHeight);
     }
