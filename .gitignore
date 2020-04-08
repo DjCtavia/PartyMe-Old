@@ -1,0 +1,10 @@
+# Ignore folders
+Diagrams/
+Keys/
+
+# Ignore pbo and pbo.bak
+Addons/*.pbo
+Addons/*.pbo.bak
+
+# Ignore debug bat
+Addons/*.bat

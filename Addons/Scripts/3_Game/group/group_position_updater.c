@@ -35,7 +35,7 @@ class PM_Group_Position_Updater
     void UpdatePlayerInfos(Man playerSelected, PlayerIdentity pIdentity)
     {
         if (!pIdentity) return;
-        ref PM_Players_Infos_t pInfos = group.Get(pIdentity.GetId());
+        ref PM_Player_Infos_t pInfos = group.Get(pIdentity.GetId());
 
         if (pInfos)
         {
@@ -43,3 +43,13 @@ class PM_Group_Position_Updater
         }
     }
 };
+
+static ref PM_Group_Position_Updater g_PM_group_position_updater;
+static ref PM_Group_Position_Updater PM_GetGroupPositionUpdater()
+{
+    if (!g_PM_group_position_updater)
+    {
+        g_PM_group_position_updater = new PM_Group_Position_Updater();
+    }
+    return g_PM_group_position_updater;
+}

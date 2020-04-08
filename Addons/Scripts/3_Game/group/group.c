@@ -5,11 +5,11 @@
 class PM_Group
 {
     bool isLeader = true;
-    ref map<string, ref PM_Players_Infos_t> players;
+    ref map<string, ref PM_Player_Infos_t> players;
 
     void PM_group()
     {
-        players = new map<string, ref PM_Players_Infos_t>;
+        players = new map<string, ref PM_Player_Infos_t>;
     }
 
     // Return if player is in group
@@ -31,7 +31,7 @@ class PM_Group
     {
         if (players && !players.Contains(id))
         {
-            ref PM_Players_Infos_t member = new PM_Players_Infos_t();
+            ref PM_Player_Infos_t member = new PM_Player_Infos_t();
             member.name = name;
             member.position = position;
             member.health = health;
@@ -44,7 +44,7 @@ class PM_Group
     // Update health and position of group member
     void UpdatePlayerHealthAndPosition(string id, float health, vector position)
     {
-        ref PM_Players_Infos_t playerInfos;
+        ref PM_Player_Infos_t playerInfos;
 
         if (players)
         {
@@ -60,7 +60,7 @@ class PM_Group
     // Update health of group member
     void UpdatePlayerHealth(string id, float health)
     {
-        ref PM_Players_Infos_t playerInfos;
+        ref PM_Player_Infos_t playerInfos;
 
         if (players)
         {
@@ -75,7 +75,7 @@ class PM_Group
     // Update position of group member
     void UpdatePlayerPosition(string id, vector position)
     {
-        ref PM_Players_Infos_t playerInfos;
+        ref PM_Player_Infos_t playerInfos;
 
         if (players)
         {

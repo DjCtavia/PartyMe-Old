@@ -3,7 +3,7 @@
 
 ## Description
 
-PartyMe is a mod that was created for the game DayZ created by Bohemia Interractive. The language used is Enforce script.
+**PartyMe** is a mod that was created for the game DayZ created by *Bohemia Interractive*. The language used is Enforce script.
 
 "It is an Object-Oriented Scripting Language (OOP) that works with objects and classes and is similar to C# programming language."
 [Quote used, and wiki for syntax reference](https://community.bistudio.com/wiki/DayZ:Enforce_Script_Syntax)

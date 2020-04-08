@@ -25,6 +25,7 @@ class PM_group_constraint
         return can_use_hud;
     }
 
+    // RPC request receive by the server when connecting
     void UpdateServerConstraint(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
         Param2<int, bool> data;
