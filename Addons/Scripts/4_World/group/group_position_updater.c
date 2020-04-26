@@ -32,7 +32,7 @@ class PM_Group_Position_Updater
         {
             playerSelected = ClientData.m_PlayerBaseList.Get(playerIndex);
             ref PlayerIdentity pIdentity;
-            if (playerSelected)
+            if (playerSelected && playerSelected.IsAlive())
             {
                 pIdentity = playerSelected.GetIdentity();
                 FindLocalPlayer(playerSelected, pIdentity, group);
@@ -44,7 +44,7 @@ class PM_Group_Position_Updater
     // Get player entity (class Man) for updating position later locally
     void FindLocalPlayer(ref Man playerSelected, ref PlayerIdentity pIdentity, ref PM_Group group)
     {
-        string playerId;
+        string playerId = "";
         if (!pIdentity || !PM_GetPlayerId(playerId)) return;
         ref PM_Player_Infos_t pInfos = group.players.Get(pIdentity.GetId());
 
@@ -66,7 +66,7 @@ class PM_Group_Position_Updater
 
         if (pInfos)
         {
-            MiscGameplayFunctions.GetHeadBonePos(playerSelected, pInfos.position);
+            MiscGameplayFunctions.GetHeadBonePos(PlayerBase.Cast(playerSelected), pInfos.position);
             pInfos.position += "0 0.3 0";
         }
     }
@@ -89,7 +89,7 @@ class PM_Group_Position_Updater
     // Verify if Man entity is reachable locally
     void IsLocalPlayerMissing(ref PM_Group group)
     {
-        string playerId;
+        string playerId = "";
         if (!group || !PM_GetPlayerId(playerId)) return;
 
         foreach (ref PM_Player_Infos_t pInfos : group.players.GetValueArray())
@@ -121,6 +121,7 @@ class PM_Group_Position_Updater
             pInfos.localPlayer = null;
             pInfos.isLocal = false;
         }
+        Print("[PM] Player died, localPlayer variable has been reset to NULL. Dead player id: " + data.param1);
     }
 };
 
