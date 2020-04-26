@@ -34,9 +34,11 @@ class PM_Group
         {
             ref PM_Player_Infos_t member = new PM_Player_Infos_t();
             member.name = name;
+            member.id = id;
             member.position = position;
             member.health = health;
             member.w_marker = new PM_Marker_Widget();
+            member.isLocal = false;
             players.Set(id, member);
             Print("Joueur crée" + players.ToString());
             return true;
