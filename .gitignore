@@ -8,3 +8,6 @@ Addons/*.pbo.bak
 
 # Ignore debug bat
 Addons/*.bat
+
+# Ignore VSCODE workspace
+workspace.code-workspace

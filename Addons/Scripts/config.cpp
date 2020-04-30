@@ -29,6 +29,7 @@ class CfgMods
 		version = "7"; 
 		extra = 0;
 		type = "mod";
+		inputs = "partyme/scripts/partyme_inputs.xml";
 		
 		dependencies[] = {"Game", "Mission", "World", "gui"};
 

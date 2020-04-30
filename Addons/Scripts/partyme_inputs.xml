@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+    <inputs>
+        <actions>
+            <input name="OpenPartyMeMenu" loc="Open Party menu" />
+        </actions>
+    </inputs>
+    <preset>
+        <input name="OpenPartyMeMenu">
+            <btn name="kP" />
+        </input>
+    </preset>
+</modded_inputs>

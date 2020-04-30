@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{A89FEB754E9296EF}Addons/Gui/fonts/varelakfont/varela16.edds"
+ Author "djctavia-pc"
+ ChangeDate 1577347229
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "varela16.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

@@ -9,13 +9,13 @@ FrameWidgetClass rootFrame {
  {
   ImageWidgetClass i_logo {
    visible 1
-   position 24 24
-   size 48 48
+   position 32 31.5
+   size 32 32
    hexactpos 1
    vexactpos 1
    hexactsize 1
    vexactsize 1
-   imageTexture "{D70B9132D04BF14C}partyme/gui/images/marker/partyme_blue.tga"
+   imageTexture "{D70B9132D04BF14C}partyme/gui/images/marker/ally.tga"
    mode blend
    "src alpha" 1
    stretch 1

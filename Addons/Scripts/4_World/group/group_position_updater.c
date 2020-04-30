@@ -51,7 +51,7 @@ class PM_Group_Position_Updater
         if (pInfos && !pInfos.isLocal)
         {
             // Tell server no more update is required [RPC]
-            GetRPCManager().SendRPC("PartyMe", "RemovePlayerUpdatePosition", new Param2<string, string>(playerId, pInfos.id));
+            GetRPCManager().SendRPC("PartyMe", "RemovePlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
             Print("[PM] Local player " + pInfos.id + " has been found!");
             pInfos.localPlayer = playerSelected;
             pInfos.isLocal = true;
@@ -71,7 +71,13 @@ class PM_Group_Position_Updater
         }
     }
 
-    // Update player position over network
+    /*
+        Description:
+            Update player position over network
+        Data:
+            Param1: Player leaving the group
+            Param2: Player to kick
+    */
     void UpdatePlayerPositionNetwork(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
         Param2<string, vector> data;
@@ -80,13 +86,20 @@ class PM_Group_Position_Updater
         ref PM_Group group = PM_GetGroup();
         ref PM_Player_Infos_t pInfos = group.players.Get(data.param1);
 
+        Print("[PM] UpdatePlayerPositionNetwork: " + data.param1);
         if (pInfos)
         {
             pInfos.position = data.param2;
         }
     }
 
-    // Verify if Man entity is reachable locally
+    /*
+        Description:
+            Verify if Man entity is reachable locally
+        Data:
+            Param1: Player leaving the group
+            Param2: Player to kick
+    */
     void IsLocalPlayerMissing(ref PM_Group group)
     {
         string playerId = "";
@@ -97,7 +110,7 @@ class PM_Group_Position_Updater
             if (pInfos && pInfos.isLocal && !pInfos.localPlayer)
             {
                 // Ask server update [RPC]
-                GetRPCManager().SendRPC("PartyMe", "AddPlayerUpdatePosition", new Param2<string, string>(playerId, pInfos.id));
+                GetRPCManager().SendRPC("PartyMe", "AskPlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
                 Print("[PM] Local player " + pInfos.id + " is missing...");
                 pInfos.isLocal = false;
             }

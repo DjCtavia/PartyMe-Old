@@ -16,12 +16,10 @@ modded class PlayerBase
     void ResetPlayerEntityRPC(string playerKilledId)
     {
         PM_Group_Manager groupManager = PM_GetGroupManager();
-        ref array<string> playersInGroup = groupManager.GetGroup(groupManager.GetPlayerGroupId(playerKilledId));
+        ref array<string> playersInGroup = groupManager.GetGroupMembersFromMember(playerKilledId);
 
-        Print("[PM] Entered in ResetPlayerEntityRPC.");
         if (!playersInGroup)
             return;
-        Print("[PM] Player is actually in a group.");
         foreach (string playerIdGroup : playersInGroup)
         {
             PlayerIdentity identity;
@@ -31,10 +29,8 @@ modded class PlayerBase
             if (identity)
             {
                 // Send RPC for reseting MAN
-                Print("[PM] Player identity has been found, RPC has being sent to: " + identity.GetId());
                 GetRPCManager().SendRPC("PartyMe", "ResetPlayerEntity", new Param1<string>(playerKilledId), false, identity);
             }
         }
-        Print("[PM] Leaving ResetPlayerEntityRPC!");
     }
 }

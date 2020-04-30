@@ -1,0 +1,37 @@
+ButtonWidgetClass root {
+ color 0.0941 0.0941 0.098 0.3137
+ size 225 48
+ halign center_ref
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ style Default
+ {
+  ImageWidgetClass image {
+   ignorepointer 1
+   position 0 0
+   size 48 48
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   mode blend
+   "src alpha" 1
+   stretch 1
+   filter 0
+  }
+  TextWidgetClass text {
+   ignorepointer 1
+   position 55 0
+   size 170 48
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "Option"
+   font "partyme/gui/fonts/varela/varela16"
+   "text valign" center
+  }
+ }
+}

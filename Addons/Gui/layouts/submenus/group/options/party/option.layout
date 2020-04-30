@@ -1,0 +1,43 @@
+FrameWidgetClass root {
+ position 0 0
+ size 700 600
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+  ScrollWidgetClass playerList {
+   ignorepointer 1
+   position 0 0
+   size 700 530
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   "Scrollbar V" 1
+  }
+  PanelWidgetClass bottomPanel {
+   ignorepointer 1
+   color 0.0941 0.0941 0.098 0.5882
+   position 0 530
+   size 700 70
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   style rover_sim_colorable
+   {
+    ButtonWidgetClass leaveParty {
+     position 25 10
+     size 200 48
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     text "Leave party"
+     font "gui/fonts/etelkatextpro16"
+    }
+   }
+  }
+ }
+}
