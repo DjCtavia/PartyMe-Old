@@ -1,5 +1,5 @@
 PanelWidgetClass root {
- color 0.0941 0.0941 0.098 0.3529
+ color 0.0941 0.0941 0.098 0.7059
  position 50 40
  size 590 55
  hexactpos 1
@@ -17,7 +17,7 @@ PanelWidgetClass root {
    hexactsize 1
    vexactsize 1
    text "PlayerName"
-   font "E:\Mes mods DayZ\ExperimentalPartyMe\Addons\Gui\fonts\varela\varela16.fnt"
+   font "partyme/Gui/fonts/varela/varela16.fnt"
    "text offset" 2 0
    "text valign" center
   }

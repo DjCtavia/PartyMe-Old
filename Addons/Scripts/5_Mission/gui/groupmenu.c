@@ -26,7 +26,7 @@ class PM_GroupMenu extends UIScriptedMenu
     override void OnShow()
     {
         super.OnShow();
-        PPEffects.SetBlurMenu(0.6);
+        PPEffects.SetBlurMenu(0.4);
     }
 
     override void OnHide()

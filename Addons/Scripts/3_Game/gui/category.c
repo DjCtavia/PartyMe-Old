@@ -1,6 +1,7 @@
 class PM_UI_Category
 {
     private static const string DEFAULT_LAYOUT      = "partyme/gui/layouts/widgets/menuoption.layout";
+    private static const string ICON_ISACTIVE       = "partyme/gui/images/options/icons/arrow.tga";
     protected string                                m_icon;
     protected Widget                                m_w_parent;
     protected Widget                                m_w_scrollMenu;
@@ -8,6 +9,7 @@ class PM_UI_Category
     protected Widget                                m_w_root;
     protected ImageWidget                           m_img_icon;
     protected TextWidget                            m_txt_optionName;
+    protected ImageWidget                           m_img_isActive;
 
     protected ref PM_UI_Menu                        m_menu;
 
@@ -25,13 +27,13 @@ class PM_UI_Category
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, m_w_scrollMenu);
         m_img_icon = ImageWidget.Cast(m_w_root.FindAnyWidget("image"));
         m_txt_optionName = TextWidget.Cast(m_w_root.FindAnyWidget("text"));
+        m_img_isActive = ImageWidget.Cast(m_w_root.FindAnyWidget("isActive"));
     }
 
     // To override
     void ConfigureWidget()
     {
-        Print("[PartyMe] Logo path: " + m_icon);
-        Print("[PartyMe] Logo loaded: " + m_img_icon.LoadImageFile(0, m_icon));
+        m_img_icon.LoadImageFile(0, m_icon);
         m_img_icon.SetImage(0);
     }
 

@@ -41,7 +41,7 @@ FrameWidgetClass rootFrame {
     }
     PanelWidgetClass Menu {
      ignorepointer 1
-     color 0.0941 0.0941 0.098 0.5882
+     color 0.0941 0.0941 0.098 0.4314
      size 700 600
      halign right_ref
      valign center_ref
