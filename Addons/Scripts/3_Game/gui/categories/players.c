@@ -71,7 +71,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         if (FindPlayer(playerId) == -1)
         {
             int pos = m_players.Count();
-            m_players.Insert(new PM_UI_PlayerWidget(m_scroll_playerList, playerId, pos));
+            m_players.Insert(new PM_UI_PlayerWidget(m_w_parent, m_scroll_playerList, playerId, pos));
         }
     }
 
@@ -96,7 +96,7 @@ class PM_UI_PlayerWidget
     private static const string DEFAULT_LAYOUT          = "partyme/gui/layouts/submenus/group/options/party/widgets/player.layout";
     private static const string ICON_MORE_OPTIONS       = "partyme/gui/images/options/icons/arrow.tga";
     private static const string ICON_SHOWHIDE_MARKER    = "partyme/gui/images/options/icons/eye.tga";
-                                                        m_w_parent;
+    Widget                                              m_w_parent;
     Widget                                              m_w_root;
     TextWidget                                          m_txt_playerName;
     ButtonWidget                                        m_btn_SHMarker;
@@ -188,5 +188,5 @@ class PM_UI_PlayerWidget
 
 class PM_UI_LeadOptions
 {
-    
+
 };
