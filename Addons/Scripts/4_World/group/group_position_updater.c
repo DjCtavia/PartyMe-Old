@@ -103,7 +103,7 @@ class PM_Group_Position_Updater
     void IsLocalPlayerMissing(ref PM_Group group)
     {
         string playerId = "";
-        if (!group || !PM_GetPlayerId(playerId)) return;
+        if (!group || !PM_GetPlayerId(playerId) || !group.players) return;
 
         foreach (ref PM_Player_Infos_t pInfos : group.players.GetValueArray())
         {

@@ -14,6 +14,11 @@ class PM_GroupMenu extends UIScriptedMenu
         return layoutRoot;
     }
 
+    Widget GetRoot()
+    {
+        return m_group_context_menu.GetMainWidget();
+    }
+
     //--------------------------------------------------------------------------
     PM_GroupContextMenu GetGroupContextMenu()
 	{

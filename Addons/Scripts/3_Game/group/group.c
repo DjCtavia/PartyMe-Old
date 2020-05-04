@@ -10,6 +10,13 @@ class PM_Group
     void PM_Group()
     {
         players = new map<string, ref PM_Player_Infos_t>;
+        AddEvents();
+    }
+
+    void AddEvents()
+    {
+        PM_GetEvents().AddEvent("PlayerJoinGroup", this);
+        PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
     }
 
     // Return if player is in group
@@ -29,7 +36,7 @@ class PM_Group
     // Add new player to group
     bool AddPlayer(string id, string name, vector position, float health)
     {
-        Print("[AddPlayer] " + players.ToString());
+        Print("[PartyMe][AddPlayer] " + players.ToString());
         if (players && !players.Contains(id))
         {
             ref PM_Player_Infos_t member = new PM_Player_Infos_t();
@@ -40,7 +47,7 @@ class PM_Group
             member.w_marker = new PM_Marker_Widget();
             member.isLocal = false;
             players.Set(id, member);
-            Print("Joueur crée" + players.ToString());
+            Print("[PartyMe] Joueur crée" + players.ToString());
             return true;
         }
         return false;
@@ -109,6 +116,17 @@ class PM_Group
         {
             players.Clear();
         }
+    }
+
+    // Events
+    void OnPlayerJoinGroup(PM_Event_Params eventParams)
+    {
+        AddPlayer(eventParams.playerIdFrom, eventParams.name, eventParams.position, eventParams.health);
+    }
+
+    void OnPlayerLeaveGroup(PM_Event_Params eventParams)
+    {
+        RemovePlayer(eventParams.playerIdFrom);
     }
 };
 

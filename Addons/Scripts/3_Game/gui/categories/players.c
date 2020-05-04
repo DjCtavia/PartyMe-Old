@@ -26,19 +26,16 @@ class PM_UI_Menu_Party extends PM_UI_Menu
     protected ScrollWidget                          m_scroll_playerList;
     protected ButtonWidget                          m_btn_leaveParty;
 
-    protected ref array<ref PM_UI_PlayerWidget>     m_players;
+    protected ref array<ref PM_UI_party_PlayerWidget>     m_players;
 
     void PM_UI_Menu_Party(Widget parent)
     {
         m_layoutPath = "partyme/gui/layouts/submenus/group/options/party/option.layout";
         m_w_parent = parent;
-        m_players = new array<ref PM_UI_PlayerWidget>;
+        m_players = new array<ref PM_UI_party_PlayerWidget>;
         Init();
-        AddPlayer("Abc");
-        AddPlayer("Cde");
-        AddPlayer("Fgh");
-        AddPlayer("Ijk");
-        AddPlayer("Lmn");
+        RetrievePlayersFromGroup()
+        PM_GetEvents().AddEvent("PlayerJoinGroup", this);
     }
 
     override void GetWidgets()
@@ -46,6 +43,19 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         super.GetWidgets();
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
         m_btn_leaveParty = ButtonWidget.Cast(m_w_root.FindAnyWidget("leaveParty"));
+    }
+
+    void RetrievePlayersFromGroup()
+    {
+        array<string> playerIDs = PM_GetGroup().players.GetKeyArray();
+
+        if (playerIDs)
+        {
+            foreach (string playerId : playerIDs)
+            {
+                AddPlayer(playerId);
+            }
+        }
     }
 
     void SetWidgetPlayerPosition(int index)
@@ -57,7 +67,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
     {
         for (int index = 0; index < m_players.Count(); index++)
         {
-            ref PM_UI_PlayerWidget playerWidget = m_players.Get(index);
+            ref PM_UI_party_PlayerWidget playerWidget = m_players.Get(index);
             if (playerWidget && playerWidget.GetPlayerId() == playerId)
             {
                 return index;
@@ -71,15 +81,17 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         if (FindPlayer(playerId) == -1)
         {
             int pos = m_players.Count();
-            m_players.Insert(new PM_UI_PlayerWidget(m_w_parent, m_scroll_playerList, playerId, pos));
+            m_players.Insert(new PM_UI_party_PlayerWidget(m_w_parent, m_scroll_playerList, playerId, pos));
         }
     }
 
     void RemovePlayer(string playerId)
     {
-        if (FindPlayer(playerId) != -1)
+        int indexPlayer = FindPlayer(playerId);
+
+        if (indexPlayer != -1)
         {
-            
+            m_players.Remove(indexPlayer);
             UpdateWidgetsPosition();
         }
     }
@@ -88,11 +100,17 @@ class PM_UI_Menu_Party extends PM_UI_Menu
     {
 
     }
+
+    // Events
+    void OnPlayerJoinGroup(PM_Event_Params eventParams)
+    {
+        // Delayed call, the player must first exist in the group
+        GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(AddPlayer, 10, false, eventParams.playerIdFrom);
+    }
 };
 
-class PM_UI_PlayerWidget
+class PM_UI_party_PlayerWidget
 {
-    private static int FAKE_NAME                        = 0;
     private static const string DEFAULT_LAYOUT          = "partyme/gui/layouts/submenus/group/options/party/widgets/player.layout";
     private static const string ICON_MORE_OPTIONS       = "partyme/gui/images/options/icons/arrow.tga";
     private static const string ICON_SHOWHIDE_MARKER    = "partyme/gui/images/options/icons/eye.tga";
@@ -106,7 +124,7 @@ class PM_UI_PlayerWidget
 
     string                                              m_playerId;
 
-    void PM_UI_PlayerWidget(Widget master, Widget parent, string playerId, int arrayPosition)
+    void PM_UI_party_PlayerWidget(Widget master, Widget parent, string playerId, int arrayPosition)
     {
         m_playerId = playerId;
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, parent);
@@ -116,7 +134,7 @@ class PM_UI_PlayerWidget
         SetPosition(arrayPosition);
     }
 
-    void ~PM_UI_PlayerWidget()
+    void ~PM_UI_party_PlayerWidget()
     {
         m_w_root.Unlink();
     }
@@ -139,20 +157,15 @@ class PM_UI_PlayerWidget
     //--------------------------------------------------------------------------
     void RetrievePlayerInfos()
     {
-        ref array<string> tempName = new array<string>;
-        tempName.Insert("DjCtavia");
-        tempName.Insert("VernonPrice");
-        tempName.Insert("GrosTon");
-        tempName.Insert("SomeDude");
+        ref PM_Player_Infos_t playersInfos = PM_GetGroup().players.Get(m_playerId);
 
-        if (FAKE_NAME < tempName.Count())
+        if (playersInfos)
         {
-            m_txt_playerName.SetText(tempName.Get(FAKE_NAME));
-            FAKE_NAME++;
+            m_txt_playerName.SetText(playersInfos.name);
         }
         else
         {
-            m_txt_playerName.SetText(tempName.Get(0));
+            m_txt_playerName.SetText("Player not found");
         }
     }
 

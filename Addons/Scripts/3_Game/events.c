@@ -6,12 +6,18 @@
     Note:
         If you want to add a new event with other parameters than the one display below, you should
         mod this class.
+    Advertise:
+        This class will be ALWAYS called as a strong reference.
+        The values must never be changed, except when creating the initial reference
+        to initiate the values required for future calls.
+        If you change the values during a call, you risk breaking the mod or your own additions/modifications.
 */
 class PM_Event_Params
 {
     string playerIdFrom;
     string playerIdTo;
     bool answer;
+    string name;
     vector position;
     float health;
 };
@@ -67,7 +73,7 @@ class PM_events
             eventName given was "PlayerDied"
             the function will call: "OnPlayerDied"
     */
-    void CallEvent(string eventName, PM_Event_Params params)
+    void CallEvent(string eventName, ref PM_Event_Params params)
     {
         ref array<Class> events = m_events.Get(eventName);
 
@@ -79,7 +85,7 @@ class PM_events
                 if (inst)
                 {
                     string funcName = "On" + eventName;
-                    auto paramsConverted = new Param1<PM_Event_Params>(params);
+                    auto paramsConverted = new Param1<ref PM_Event_Params>(params);
                     GetGame().GameScript.CallFunctionParams(inst, funcName, NULL, paramsConverted);
                 }
                 else

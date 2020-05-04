@@ -3,6 +3,7 @@
 */
 modded class MissionGameplay
 {
+    ref PM_RPC_C_handler            m_pm_rpc_handler;
     ref PM_GroupMenu                m_groupMenu;
 
     void MissionGameplay()
@@ -12,12 +13,13 @@ modded class MissionGameplay
 
     void InitPartyMe()
     {
+        m_pm_rpc_handler = new PM_RPC_C_handler;
         PM_GetGroupConstraint();
         PM_GetGroup();
         PM_GetGroupPositionUpdater();
         PM_GetMarkerUpdater();
 
-        PM_GetGroup().AddPlayer("FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs=", "Bobby", "0 0 0", 100);
+        // PM_GetGroup().AddPlayer("FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs=", "Bobby", "0 0 0", 100);
     }
 
     override void OnUpdate(float timeslice)
@@ -39,6 +41,13 @@ modded class MissionGameplay
                 HideGroupMenu();
             }
         }
+        if(input.LocalPress("UAUIBack",false))
+		{
+			if(menu == groupMenu)
+			{
+				HideGroupMenu();
+			}
+		}
     }
 
     void InitGroupMenu()

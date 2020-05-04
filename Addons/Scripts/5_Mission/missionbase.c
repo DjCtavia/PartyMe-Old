@@ -1,5 +1,11 @@
 modded class MissionBase
 {
+    void MissionBase()
+    {
+        // We init events on client and server side
+        PM_GetEvents();
+    }
+
     override UIScriptedMenu CreateScriptedMenu(int id)
     {
         UIScriptedMenu menu = NULL;

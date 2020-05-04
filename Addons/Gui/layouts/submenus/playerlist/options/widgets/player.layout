@@ -1,0 +1,48 @@
+PanelWidgetClass rootFrame {
+ color 0.0941 0.0941 0.098 0.7059
+ position 50 40
+ size 590 55
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ style rover_sim_colorable
+ {
+  TextWidgetClass playerName {
+   ignorepointer 1
+   position 30 10
+   size 300 35
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "PlayerName"
+   font "partyme/Gui/fonts/varela/varela16.fnt"
+   "text offset" 2 0
+   "text valign" center
+  }
+  ButtonWidgetClass inviteOption {
+   position 535 5
+   size 45 45
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   {
+    ImageWidgetClass inviteOptionImage {
+     ignorepointer 1
+     position 0 0
+     size 1 1
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     mode blend
+     "src alpha" 1
+     stretch 1
+     filter 0
+    }
+   }
+  }
+ }
+}
