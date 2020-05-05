@@ -14,6 +14,11 @@ class PM_RPC_C_group
             Param2: Player name
             Param3: Player position
             Param4: Player health
+        Event:
+            playerIdFrom: ID of player joining group
+            name: Name of player joining group
+            position: Position of player joining group
+            health: Health of player joining group
     */
     void PlayerJoinGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {

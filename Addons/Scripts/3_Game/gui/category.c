@@ -2,6 +2,8 @@ class PM_UI_Category
 {
     private static const string DEFAULT_LAYOUT      = "partyme/gui/layouts/widgets/menuoption.layout";
     private static const string ICON_ISACTIVE       = "partyme/gui/images/options/icons/arrow.tga";
+    protected int                                   m_categoryIndex;
+
     protected string                                m_icon;
     protected Widget                                m_w_parent;
     protected Widget                                m_w_scrollMenu;
@@ -15,6 +17,7 @@ class PM_UI_Category
 
     void Init(int index)
     {
+        m_categoryIndex = index;
         GetWidgets();
         ConfigureWidget();
 
@@ -37,12 +40,22 @@ class PM_UI_Category
         m_img_icon.SetImage(0);
     }
 
+    void Show(bool isVisible)
+    {
+        m_menu.Show(isVisible);
+    }
+
     bool OnClick(Widget w, int x, int y, int button)
     {
         if (button == MouseState.LEFT)
         {
             if (w == m_w_root)
             {
+                PM_GroupMenu menu = PM_GroupMenu.Cast(GetGame().GetUIManager().GetMenu());
+                if (menu)
+                {
+                    menu.GetGroupContextMenu().EnableMenu(m_categoryIndex);
+                }
                 return true;
             }
         }
@@ -90,6 +103,18 @@ class PM_UI_Menu
     {
         m_w_menu = m_w_parent.FindAnyWidget("Menu");
         GetWidgets();
+    }
+
+    void Show(bool isVisible)
+    {
+        if (isVisible)
+        {
+            m_w_root.Show(true);
+        }
+        else
+        {
+            m_w_root.Show(false);
+        }
     }
 
     void GetWidgets()

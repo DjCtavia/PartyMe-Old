@@ -36,6 +36,9 @@ class PM_RPC_C_handler
         Data:
             Param1: Array of users ID
             Param2: Array of users name
+        Event:
+            playerIdFrom: ID of a player
+            name: Name of a player
     */
     void GetPlayerList(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
@@ -55,6 +58,8 @@ class PM_RPC_C_handler
     /*
         Data:
             Param1: User leaving ID
+        Event:
+            playerIdFrom: ID of player leaving server
     */
    void PlayerLeaveServer(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
    {
@@ -62,7 +67,7 @@ class PM_RPC_C_handler
        if (!ctx.Read(data)) return;
 
        ref PM_Event_Params eventParams = new PM_Event_Params;
-       eventParams.playerIdFrom = data.param1
+       eventParams.playerIdFrom = data.param1;
        PM_GetEvents().CallEvent("PlayerLeaveServer", eventParams);
    }
 };

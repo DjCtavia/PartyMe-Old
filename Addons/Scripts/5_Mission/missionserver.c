@@ -16,8 +16,8 @@ modded class MissionServer
         PM_GetGroupManager().SetPlayerIdentity(identity.GetId(), identity);
 
         // tests
-        auto params = new Param4<string, string, vector, float>(identity.GetId(), identity.GetName(), player.GetPosition(), player.GetHealth("",""));
-        GetRPCManager().SendRPC("PartyMe", "PlayerConnect", params);
+        auto params = new Param2<string, string>(identity.GetId(), identity.GetName());
+        GetRPCManager().SendRPC("PartyMe", "PlayerJoinServer", params);
     }
 
     override void InvokeOnDisconnect(PlayerBase player)

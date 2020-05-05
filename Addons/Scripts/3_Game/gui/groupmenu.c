@@ -20,7 +20,7 @@ class PM_GroupMenu extends UIScriptedMenu
     }
 
     //--------------------------------------------------------------------------
-    PM_GroupContextMenu GetGroupContextMenu()
+    ref PM_GroupContextMenu GetGroupContextMenu()
 	{
 		return m_group_context_menu;
 	}
@@ -31,6 +31,7 @@ class PM_GroupMenu extends UIScriptedMenu
     override void OnShow()
     {
         super.OnShow();
+        SetFocus(layoutRoot);
         PPEffects.SetBlurMenu(0.4);
     }
 
@@ -43,5 +44,14 @@ class PM_GroupMenu extends UIScriptedMenu
     override void Update(float timeslice)
 	{
 	    m_group_context_menu.Update(timeslice);
+	}
+
+    override bool OnClick(Widget w, int x, int y, int button)
+	{
+        if (m_group_context_menu.OnClick(w, x, y, button))
+        {
+            return true;
+        }
+		return false;
 	}
 };

@@ -20,11 +20,13 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
         m_group_context_menu_root_widget = GetGame().GetWorkspace().CreateWidgets("partyme/gui/layouts/group.layout");
         m_group_context_menu_root_widget.SetHandler(this);
         AddCategories();
+        EnableMenu(0);
     }
 
     void AddCategories()
     {
         m_options.Insert(new PM_UI_Option_Party(m_group_context_menu_root_widget, m_options.Count()));
+        m_options.Insert(new PM_UI_Option_Playerlist(m_group_context_menu_root_widget, m_options.Count()));
     }
 
     Widget GetMainWidget()
@@ -33,6 +35,27 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
     }
 
     //--------------------------------------------------------------------------
+    void EnableMenu(int menuId)
+    {
+        ref PM_UI_Category category;
+
+        for (int menuIndex = 0; menuIndex < m_options.Count(); ++menuIndex)
+        {
+            category = m_options.Get(menuIndex);
+            if (category)
+            {
+                if (menuIndex != menuId)
+                {
+                    category.Show(false);
+                }
+                else
+                {
+                    category.Show(true);
+                }
+            }
+        }
+    }
+
     void Show(int x, int y)
     {
         m_group_context_menu_root_widget.SetPos(x, y);
@@ -54,16 +77,15 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
     */
    override bool OnClick(Widget w, int x, int y, int button)
    {
-       foreach (ref PM_UI_Category option : m_options)
+       ref PM_UI_Category option;
+
+       for (int categoryIndex = 0; categoryIndex < m_options.Count(); ++categoryIndex)
        {
-           if (option.OnClick(w, x, y, button))
+           option = m_options.Get(categoryIndex);
+           if (option && option.OnClick(w, x, y, button))
            {
                return true;
            }
-       }
-       if (m_option_displayed.OnClick(w, x, y, button))
-       {
-           return true;
        }
        return super.OnClick(w, x, y, button);
    }

@@ -6,6 +6,12 @@ modded class MissionBase
         PM_GetEvents();
     }
 
+    void ~MissionBase()
+    {
+        PM_GetEvents().Clear();
+    }
+
+    //--------------------------------------------------------------------------
     override UIScriptedMenu CreateScriptedMenu(int id)
     {
         UIScriptedMenu menu = NULL;

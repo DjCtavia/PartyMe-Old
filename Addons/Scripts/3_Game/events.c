@@ -32,6 +32,12 @@ class PM_events
         Print("[PartyMe][Event] Module loaded.");
     }
 
+    void Clear()
+    {
+        Print("[PartyMe][Event] Module cleared.");
+        m_events.Clear();
+    }
+
     void AddEvent(string eventName, Class instToAdd)
     {
         ref array<Class> events;

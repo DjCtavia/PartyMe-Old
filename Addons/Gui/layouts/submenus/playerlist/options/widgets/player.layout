@@ -21,7 +21,8 @@ PanelWidgetClass rootFrame {
    "text offset" 2 0
    "text valign" center
   }
-  ButtonWidgetClass inviteOption {
+  ButtonWidgetClass invite {
+   disabled 0
    position 535 5
    size 45 45
    hexactpos 1
@@ -29,7 +30,8 @@ PanelWidgetClass rootFrame {
    hexactsize 1
    vexactsize 1
    {
-    ImageWidgetClass inviteOptionImage {
+    ImageWidgetClass logo {
+     visible 1
      ignorepointer 1
      position 0 0
      size 1 1

@@ -33,6 +33,17 @@ class PM_Group
         return isLeader;
     }
 
+    /*
+        Description:
+            Calculate max number of player allowed in a party,
+            and determine if the player is lead of group for inviting
+            a new player.
+    */
+    bool CanInvite()
+    {
+        return isLeader;
+    }
+
     // Add new player to group
     bool AddPlayer(string id, string name, vector position, float health)
     {
