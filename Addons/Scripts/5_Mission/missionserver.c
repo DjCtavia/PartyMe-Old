@@ -1,7 +1,18 @@
 modded class MissionServer
 {
+    ref PM_S_settings                   m_settings;
+    ref PM_RPC_S_handler                m_pm_rpc_handler;
+
     void MissionServer()
     {
+        InitPartyMe();
+    }
+
+    void InitPartyMe()
+    {
+        m_settings = new PM_S_settings;
+        m_settings.Load();
+        m_pm_rpc_handler = new PM_RPC_S_handler;
         PM_GetGroupManager();
         PM_Server_GetGroupPositionUpdater();
     }

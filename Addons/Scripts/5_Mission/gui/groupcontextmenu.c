@@ -1,4 +1,4 @@
-class PM_GroupContextMenu extends ScriptedWidgetEventHandler
+class PM_GroupContextMenu : ScriptedWidgetEventHandler
 {
     private Widget                                      m_group_context_menu_root_widget;
     protected ref array<ref PM_UI_Category>             m_options;
@@ -7,7 +7,6 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
     void PM_GroupContextMenu()
     {
         m_options = new array<ref PM_UI_Category>;
-        Init();
     }
 
     /*--------------------------------------------------------------------------
@@ -58,7 +57,7 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
 
     void Show(int x, int y)
     {
-        m_group_context_menu_root_widget.SetPos(x, y);
+        // m_group_context_menu_root_widget.SetPos(x, y);
         m_group_context_menu_root_widget.Show(true);
     }
 
@@ -68,27 +67,27 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
     }
 
     bool IsVisible()
-	{
-		return m_group_context_menu_root_widget.IsVisible();
-	}
+    {
+        return m_group_context_menu_root_widget.IsVisible();
+    }
 
     /*--------------------------------------------------------------------------
         Events
     */
-   override bool OnClick(Widget w, int x, int y, int button)
-   {
-       ref PM_UI_Category option;
+    override bool OnClick(Widget w, int x, int y, int button)
+    {
+        ref PM_UI_Category option;
 
-       for (int categoryIndex = 0; categoryIndex < m_options.Count(); ++categoryIndex)
-       {
-           option = m_options.Get(categoryIndex);
-           if (option && option.OnClick(w, x, y, button))
-           {
-               return true;
-           }
-       }
-       return super.OnClick(w, x, y, button);
-   }
+        for (int categoryIndex = 0; categoryIndex < m_options.Count(); ++categoryIndex)
+        {
+            option = m_options.Get(categoryIndex);
+            if (option && option.OnClick(w, x, y, button))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
    override bool OnMouseEnter(Widget w, int x, int y)
    {
@@ -103,7 +102,7 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
        {
            return true;
        }
-       return super.OnMouseEnter(w, x, y);
+       return false;
    }
 
    override bool OnMouseLeave(Widget w, Widget enterW, int x, int y)
@@ -119,7 +118,7 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
        {
            return true;
        }
-       return super.OnMouseLeave(w, enterW, x, y);
+       return false;
    }
 
    override bool OnDrag(Widget w, int x, int y)
@@ -135,7 +134,7 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
        {
            return true;
        }
-       return super.OnDrag(w, x, y);
+       return false;
    }
 
    override bool OnDrop(Widget w, int x, int y, Widget reciever)
@@ -151,7 +150,7 @@ class PM_GroupContextMenu extends ScriptedWidgetEventHandler
        {
            return true;
        }
-       return super.OnDrop(w, x, y, reciever);
+       return false;
    }
 
    void Update(float timeslice)

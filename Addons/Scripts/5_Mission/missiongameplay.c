@@ -3,8 +3,8 @@
 */
 modded class MissionGameplay
 {
-    ref PM_RPC_C_handler            m_pm_rpc_handler;
-    ref PM_GroupMenu                m_groupMenu;
+    ref PM_RPC_C_handler                m_pm_rpc_handler;
+    ref PM_GroupMenu                    m_groupMenu;
 
     void MissionGameplay()
     {
@@ -22,6 +22,7 @@ modded class MissionGameplay
         // PM_GetGroup().AddPlayer("FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs=", "Bobby", "0 0 0", 100);
     }
 
+    //--------------------------------------------------------------------------
     override void OnUpdate(float timeslice)
 	{
         super.OnUpdate(timeslice);
@@ -31,7 +32,7 @@ modded class MissionGameplay
 
         if (input.LocalPress("OpenPartyMeMenu", false))
         {
-            if(!groupMenu)
+            if (!groupMenu)
             {
                 ShowGroupMenu();
                 menu = groupMenu;
@@ -42,12 +43,12 @@ modded class MissionGameplay
             }
         }
         if(input.LocalPress("UAUIBack",false))
-		{
-			if(menu == groupMenu)
-			{
-				HideGroupMenu();
-			}
-		}
+        {
+            if(menu == groupMenu)
+            {
+                HideGroupMenu();
+            }
+        }
     }
 
     void InitGroupMenu()
@@ -71,12 +72,12 @@ modded class MissionGameplay
             }
 
             if(!GetUIManager().FindMenu(MENU_GROUP))
-			{
-				GetUIManager().ShowScriptedMenu(m_groupMenu, null);
-			}
+            {
+                GetUIManager().ShowScriptedMenu(m_groupMenu, null);
+            }
             // A verifier
             MoveHudForInventory(true);
-			PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
+            PlayerControlDisable(INPUT_EXCLUDE_INVENTORY);
         }
     }
 
@@ -85,17 +86,17 @@ modded class MissionGameplay
         if (m_groupMenu)
         {
             GetUIManager().HideScriptedMenu(m_groupMenu);
-			MoveHudForInventory(false);
-			PlayerControlEnable(false);
+            MoveHudForInventory(false);
+            PlayerControlEnable(false);
         }
     }
 
     void DestroyGroupMenu()
     {
         if(m_groupMenu)
-		{
-			m_groupMenu.Close();
-			m_groupMenu = NULL;
-		}
+        {
+            m_groupMenu.Close();
+            m_groupMenu = NULL;
+        }
     }
 };

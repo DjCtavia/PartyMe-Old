@@ -31,8 +31,21 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
     {
         m_layoutPath = "partyme/gui/layouts/submenus/playerlist/options/option.layout";
         m_w_parent = parent;
+        m_players = new array<ref PM_UI_playerlist_PlayerWidget>;
         Init();
+        InitPlayerList();
         PM_GetEvents().AddEvent("PlayerJoinServer", this);
+        Print("[PartyMe] PM_UI_Menu_Playerlist constructor.");
+    }
+
+    void InitPlayerList()
+    {
+        string playerId;
+
+        if (PM_GetPlayerId(playerId))
+        {
+            GetRPCManager().SendRPC("PartyMe", "GetPlayerList", new Param1<string>(playerId));
+        }
     }
 
     override void GetWidgets()
@@ -41,13 +54,68 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
     }
 
-    // Events
+    //--------------------------------------------------------------------------
+    int FindPlayer(string playerId)
+    {
+        for (int index = 0; index < m_players.Count(); index++)
+        {
+            ref PM_UI_playerlist_PlayerWidget playerWidget = m_players.Get(index);
+            if (playerWidget && playerWidget.GetPlayerId() == playerId)
+            {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    void AddPlayer(string playerId, string playerName)
+    {
+        if (FindPlayer(playerId) == -1)
+        {
+            auto playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, playerId, playerName);
+            int pos = m_players.Count();
+            m_players.Insert(playerWidget);
+            playerWidget.SetPosition(pos);
+        }
+    }
+
+     void RemovePlayer(string playerId)
+    {
+        int indexPlayer = FindPlayer(playerId);
+
+        if (indexPlayer != -1)
+        {
+            m_players.Remove(indexPlayer);
+            UpdateWidgetsPosition();
+        }
+    }
+
+    void AddMissingPlayers(array<Param2<string, string>> players)
+    {
+        foreach (auto player : players)
+        {
+            AddPlayer(player.param1, player.param2);
+        }
+    }
+
+    void UpdateWidgetsPosition()
+    {
+        for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
+        {
+            // playerWidget.
+        }
+    }
+
+    //-------------------------------------------------------------------------- Events
     void OnPlayerJoinServer(ref PM_Event_Params eventParams)
     {
-        ref PM_UI_playerlist_PlayerWidget playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, eventParams.playerIdFrom);
+        auto playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, eventParams.playerIdFrom, eventParams.name);
 
-        playerWidget.SetPosition(m_players.Count());
-        m_players.Insert(playerWidget);
+        if (m_players)
+        {
+            playerWidget.SetPosition(m_players.Count());
+            m_players.Insert(playerWidget);
+        }
     }
 };
 
@@ -59,23 +127,35 @@ class PM_UI_playerlist_PlayerWidget
 
     private Widget                                          m_w_root;
     private ButtonWidget                                    m_btn_invite;
+    private TextWidget                                      m_txt_playerName;
     private ImageWidget                                     m_img_invite;
 
     private string                                          m_playerId;
+    private string                                          m_playerName;
     private bool                                            m_canInvite;
 
-    void PM_UI_playerlist_PlayerWidget(Widget parent, string playerId)
+    void PM_UI_playerlist_PlayerWidget(Widget parent, string playerId, string playerName)
     {
         m_playerId = playerId;
+        m_playerName = playerName;
         m_canInvite = true;
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, parent);
         GetWidgets();
+        ConfigWidgets();
     }
 
     private void GetWidgets()
     {
         m_btn_invite = ButtonWidget.Cast(m_w_root.FindAnyWidget("invite"));
-        m_img_invite = ImageWidget.Cast(m_w_root.FindAnyWidget("logoInvite"));
+        m_txt_playerName = TextWidget.Cast(m_w_root.FindAnyWidget("playerName"));
+        m_img_invite = ImageWidget.Cast(m_w_root.FindAnyWidget("logo"));
+
+    }
+
+    private void ConfigWidgets()
+    {
+        m_txt_playerName.SetText(m_playerName);
+        InitIcons();
     }
 
     private void InitIcons()
@@ -98,6 +178,17 @@ class PM_UI_playerlist_PlayerWidget
     {
         m_btn_invite.Enable(false);
         m_img_invite.Show(false);
+    }
+
+    //--------------------------------------------------------------------------
+    string GetPlayerId()
+    {
+        return m_playerId;
+    }
+
+    string GetPlayerName()
+    {
+        return m_playerName;
     }
 
     //--------------------------------------------------------------------------
