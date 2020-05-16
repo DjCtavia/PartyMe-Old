@@ -25,6 +25,7 @@ class PM_GroupContextMenu : ScriptedWidgetEventHandler
     void AddCategories()
     {
         m_options.Insert(new PM_UI_Option_Party(m_group_context_menu_root_widget, m_options.Count()));
+        m_options.Insert(new PM_UI_Option_Invitations(m_group_context_menu_root_widget, m_options.Count()));
         m_options.Insert(new PM_UI_Option_Playerlist(m_group_context_menu_root_widget, m_options.Count()));
     }
 

@@ -35,7 +35,6 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         Init();
         InitPlayerList();
         PM_GetEvents().AddEvent("PlayerJoinServer", this);
-        Print("[PartyMe] PM_UI_Menu_Playerlist constructor.");
     }
 
     void InitPlayerList()
@@ -126,8 +125,8 @@ class PM_UI_playerlist_PlayerWidget
     private static const string ICON_INVITE                 = "partyme/gui/images/options/icons/invite.tga";
 
     private Widget                                          m_w_root;
-    private ButtonWidget                                    m_btn_invite;
     private TextWidget                                      m_txt_playerName;
+    private ButtonWidget                                    m_btn_invite;
     private ImageWidget                                     m_img_invite;
 
     private string                                          m_playerId;

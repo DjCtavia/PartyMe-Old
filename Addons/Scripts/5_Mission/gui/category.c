@@ -37,7 +37,6 @@ class PM_UI_Category
     void ConfigureWidget()
     {
         m_img_icon.LoadImageFile(0, m_icon);
-        m_img_icon.SetImage(0);
     }
 
     void Show(bool isVisible)
