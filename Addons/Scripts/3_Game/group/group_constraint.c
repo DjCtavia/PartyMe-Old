@@ -15,8 +15,14 @@ class PM_Group_Constraint
     bool IsLimitReach(int numberOfPlayersInGroup)
     {
         numberOfPlayersInGroup += 1;
-        if (numberOfPlayersInGroup < max_player_number_in_group)
+        if (max_player_number_in_group < 0)
+        {
+            return true;
+        }
+        else if (numberOfPlayersInGroup < max_player_number_in_group)
+        {
             return false;
+        }
         return true;
     }
 
