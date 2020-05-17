@@ -53,4 +53,19 @@ modded class MissionServer
         // We reasign the PlayerBase for constant update later.
         PM_GetGroupManager().SetPlayerEntity(identity.GetId(), player);
     }
+	
+	// Utils
+	PlayerIdentity GetPlayerIdentity(string playerId)
+	{
+		for (int playerIndex = 0; playerIndex < m_Players.Count(); playerIndex++)
+		{
+			PlayerIdentity pIdentity = m_Players.Get(playerIndex).GetIdentity();
+			
+			if (pIdentity && pIdentity.GetId() == playerId)
+			{
+				return pIdentity;
+			}
+		}
+		return null;
+	}
 };
