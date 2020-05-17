@@ -19,7 +19,7 @@ class PM_S_Invitations extends PM_InvitationsHandler
 
 	override void AfterInvitation(string sender, string receiver)
 	{
-		PlayerIdentity receiverIdentity = GetMission().GetPlayerIdentity(receiver);
+		PlayerIdentity receiverIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(receiver);
 		
 		if (receiverIdentity)
 		{

@@ -18,7 +18,7 @@ class PM_InvitationsHandler
 		return false;
 	}
 
-	protected bool ConditionnalInvitation(string sender, string receiver) {return false};
+	protected bool ConditionnalInvitation(string sender, string receiver) {return false;};
 	protected void BeforeInvitation(string sender, string receiver) {};
 	protected void AfterInvitation(string sender, string receiver) {};
 
@@ -37,11 +37,10 @@ class PM_InvitationsHandler
 	void RemovePlayerInvite(string sender, string receiver)
 	{
 		ref array<string> invitationsList = m_invitations.Get(receiver);
-		int inviteIndex;
 
 		if (invitationsList)
 		{
-			inviteIndex = invitationsList.RemoveItem(sender);
+			invitationsList.RemoveItem(sender);
 		}
 	}
 };
