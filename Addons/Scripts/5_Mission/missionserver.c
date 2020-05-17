@@ -1,7 +1,8 @@
 modded class MissionServer
 {
-    ref PM_S_settings                   m_settings;
+    ref PM_S_settings                   m_pm_settings;
     ref PM_RPC_S_handler                m_pm_rpc_handler;
+	ref PM_S_Invitations				m_pm_invitations;
 
     void MissionServer()
     {
@@ -10,9 +11,10 @@ modded class MissionServer
 
     void InitPartyMe()
     {
-        m_settings = new PM_S_settings;
-        m_settings.Load();
+        m_pm_settings = new PM_S_settings;
+        m_pm_settings.Load();
         m_pm_rpc_handler = new PM_RPC_S_handler;
+		m_pm_invitations = new PM_S_Invitations;
         PM_GetGroupManager();
         PM_Server_GetGroupPositionUpdater();
     }
@@ -29,6 +31,9 @@ modded class MissionServer
         // tests
         auto params = new Param2<string, string>(identity.GetId(), identity.GetName());
         GetRPCManager().SendRPC("PartyMe", "PlayerJoinServer", params);
+		// Send server config
+		auto groupSettingsParams = new Param1<PM_Settings_Group>(m_pm_settings.group);
+		GetRPCManager().SendRPC("PartyMe", "GroupSettings", groupSettingsParams, false, identity);
     }
 
     override void InvokeOnDisconnect(PlayerBase player)
