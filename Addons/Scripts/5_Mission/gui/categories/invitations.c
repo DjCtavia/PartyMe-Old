@@ -32,9 +32,13 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_invitations_PlayerWidget>;
         Init();
-        // Fake invite
-        AddPlayer("354687", "Jojo");
+		AddEvents();
     }
+	
+	void AddEvents()
+	{
+		PM_GetEvents().AddEvent("InvitationReceived", this);
+	}
 
     override void GetWidgets()
     {
@@ -92,6 +96,14 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
             }
         }
     }
+	//-------------------------------------------------------------------------- Events
+    void OnInvitationReceived(ref PM_Event_Params eventParams)
+    {
+		string playerId = eventParams.playerIdFrom;
+		string name = eventParams.name;
+
+		AddPlayer(playerId, name);
+	}
 };
 
 class PM_UI_invitations_PlayerWidget

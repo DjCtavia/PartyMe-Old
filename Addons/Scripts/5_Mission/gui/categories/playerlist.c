@@ -33,18 +33,9 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_playerlist_PlayerWidget>;
         Init();
-        InitPlayerList();
         PM_GetEvents().AddEvent("PlayerJoinServer", this);
-    }
-
-    void InitPlayerList()
-    {
-        string playerId;
-
-        if (PM_GetPlayerId(playerId))
-        {
-            GetRPCManager().SendRPC("PartyMe", "GetPlayerList", new Param1<string>(playerId));
-        }
+		PM_GetEvents().AddEvent("PlayerLeaveServer", this);
+		GetRPCManager().SendRPC("PartyMe", "InitPlayerList");
     }
 
     override void GetWidgets()
@@ -72,8 +63,7 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         if (FindPlayer(playerId) == -1)
         {
             auto playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, playerId, playerName);
-            int pos = m_players.Count();
-            m_players.Insert(playerWidget);
+            int pos = m_players.Insert(playerWidget);
             playerWidget.SetPosition(pos);
         }
     }
@@ -101,20 +91,20 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
     {
         for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
         {
-            // playerWidget.
+			auto playerWidget = m_players.Get(indexWidget);
+			playerWidget.SetPosition(indexWidget);
         }
     }
 
     //-------------------------------------------------------------------------- Events
     void OnPlayerJoinServer(ref PM_Event_Params eventParams)
     {
-        auto playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, eventParams.playerIdFrom, eventParams.name);
-
-        if (m_players)
-        {
-            playerWidget.SetPosition(m_players.Count());
-            m_players.Insert(playerWidget);
-        }
+		AddPlayer(eventParams.playerIdFrom, eventParams.name);
+    }
+	
+	void OnPlayerLeaveServer(ref PM_Event_Params eventParams)
+    {
+		RemovePlayer(eventParams.playerIdFrom);
     }
 };
 
@@ -167,16 +157,10 @@ class PM_UI_playerlist_PlayerWidget
         m_w_root.SetPos(50, (40 + 65 * index));
     }
 
-    private void EnableInviteButton()
+    private void EnableInviteButton(bool isEnable)
     {
-        m_btn_invite.Enable(true);
-        m_img_invite.Show(true);
-    }
-
-    private void DisableInviteButton()
-    {
-        m_btn_invite.Enable(false);
-        m_img_invite.Show(false);
+        m_btn_invite.Enable(isEnable);
+        m_img_invite.Show(isEnable);
     }
 
     //--------------------------------------------------------------------------
@@ -207,8 +191,14 @@ class PM_UI_playerlist_PlayerWidget
     //--------------------------------------------------------------------------
     private void Invite()
     {
-        DisableInviteButton();
-        GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(EnableInviteButton, INVITE_DELAY);
-        // SEND RPC
+		string playerId;
+		string playerName;
+
+        EnableInviteButton(false);
+        GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(EnableInviteButton, INVITE_DELAY, false, true);
+		if (PM_GetPlayerIdAndName(playerId, playerName))
+		{
+			GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(playerId, playerName));
+		}
     }
 };

@@ -15,7 +15,7 @@ class PM_Group_Manager
 
     void AddRPCs()
     {
-        GetRPCManager().AddRPC("PartyMe", "PlayerJoinGroup", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "InvitationResponse", this, SingleplayerExecutionType.Both);
         GetRPCManager().AddRPC("PartyMe", "PlayerLeaveGroup", this, SingleplayerExecutionType.Both);
         GetRPCManager().AddRPC("PartyMe", "PlayerKickedFromGroup", this, SingleplayerExecutionType.Both);
     }
@@ -24,15 +24,29 @@ class PM_Group_Manager
         RPC functions
 
         Data:
-            Param1: Player ID who want to join
-            Param2: Group id to join
+            Param1: Id of the inviting player
+            Param2: Response to invite
     */
-    void PlayerJoinGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+    void InvitationResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
-        Param2<string, string> data;
+        Param2<string, bool> data;
         if (!ctx.Read( data )) return;
+		string partyOwnerId = data.param1;
+		bool invitationResponse = data.param2;
+		bool isGroupFull = GetServerSettings().group.IsGroupFull(GetGroupSize(partyOwnerId));
+		PlayerIdentity partyOwnerIdentity = playerIdentities.Get(partyOwnerId);
 
-
+		if (partyOwnerIdentity)
+		{
+			if (invitationResponse && IsLeader(partyOwnerId) && !isGroupFull)
+			{
+				// Has accepted and can join
+			}
+			else
+			{
+				// Can't join
+			}
+		}
     }
 
     /*
@@ -169,6 +183,27 @@ class PM_Group_Manager
         return GetGroupMembers(GetPlayerGroupId(playerId));
     }
 
+	bool IsLeader(string playerId)
+	{
+		string leaderId = playerGroup.Get(playerId);
+		
+		if (leaderId != string.Empty && leaderId != playerId)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	int GetGroupSize(string leaderId)
+	{
+		ref array<string> group = groups.Get(leaderId);
+		
+		if (group)
+		{
+			return group.Count();
+		}
+		return 0;
+	}
 };
 
 static ref PM_Group_Manager g_Group_Manager;

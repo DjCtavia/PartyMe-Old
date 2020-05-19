@@ -2,9 +2,8 @@ class PM_RPC_C_invites
 {
     void PM_RPC_C_invites()
     {
-        GetRPCManager().AddRPC("PartyMe", "InviteReceived", this, SingleplayerExecutionType.Both);
-        GetRPCManager().AddRPC("PartyMe", "InviteAccepted", this, SingleplayerExecutionType.Both);
-        GetRPCManager().AddRPC("PartyMe", "InviteRejected", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "InvitationReceivedd", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "InvitationResponse", this, SingleplayerExecutionType.Both);
     }
 
     /*
@@ -13,14 +12,15 @@ class PM_RPC_C_invites
         Event:
             playerIdFrom: ID of the inviting player
     */
-    void InviteReceived(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+    void InvitationReceivedd(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
-        Param1<string> data;
+        Param2<string, string> data;
         if (!ctx.Read(data)) return;
 
         ref PM_Event_Params eventParams = new PM_Event_Params;
         eventParams.playerIdFrom = data.param1;
-        PM_GetEvents().CallEvent("InviteReceived", eventParams);
+		eventParams.name = data.param2;
+        PM_GetEvents().CallEvent("InvitationReceived", eventParams);
     }
 
     /*
@@ -28,30 +28,16 @@ class PM_RPC_C_invites
             Param1: ID of the player accepting the invitation
         Event:
             playerIdFrom: ID of the player accepting the invitation
+			answer: Has accept invitation or no
     */
-    void InviteAccepted(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+    void InvitationResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
-        Param1<string> data;
+        Param2<string, bool> data;
         if (!ctx.Read(data)) return;
 
         ref PM_Event_Params eventParams = new PM_Event_Params;
         eventParams.playerIdFrom = data.param1;
-        PM_GetEvents().CallEvent("InviteAccepted", eventParams);
-    }
-
-    /*
-        Data:
-            Param1: ID of the player refusing the invitation
-        Event:
-            playerIdFrom: ID of the player refusing the invitation
-    */
-    void InviteRejected(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
-    {
-        Param1<string> data;
-        if (!ctx.Read(data)) return;
-
-        ref PM_Event_Params eventParams = new PM_Event_Params;
-        eventParams.playerIdFrom = data.param1;
-        PM_GetEvents().CallEvent("InviteRejected", eventParams);
+		eventParams.answer = data.param2;
+        PM_GetEvents().CallEvent("InvitationResponse", eventParams);
     }
 };

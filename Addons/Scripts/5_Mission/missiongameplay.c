@@ -3,6 +3,7 @@
 */
 modded class MissionGameplay
 {
+	ref map<string, string>				m_pm_playersName;
     ref PM_GroupMenu                    m_pm_groupMenu;
 	ref PM_RPC_C_handler                m_pm_rpc_handler;
 	ref PM_Settings_Group				m_pm_settings_group;
@@ -11,11 +12,11 @@ modded class MissionGameplay
     void MissionGameplay()
     {
         InitPartyMe();
-		AddPartyMeRPCs();
     }
 
     void InitPartyMe()
     {
+		m_pm_playersName = new map<string, string>;
         m_pm_rpc_handler = new PM_RPC_C_handler;
 		m_pm_settings_group = new PM_Settings_Group;
 		m_pm_invitations = new PM_C_Invitations;
@@ -26,11 +27,6 @@ modded class MissionGameplay
 
         // PM_GetGroup().AddPlayer("FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs=", "Bobby", "0 0 0", 100);
     }
-
-	void AddPartyMeRPCs()
-	{
-		GetRPCManager().AddRPC("PartyMe", "GroupSettings", this, SingleplayerExecutionType.Both);
-	}
 
     //--------------------------------------------------------------------------
     override void OnUpdate(float timeslice)
@@ -109,21 +105,4 @@ modded class MissionGameplay
             m_pm_groupMenu = NULL;
         }
     }
-	
-	/* RPCs
-
-        Description:
-            Save group server settings on client
-        Data:
-            Param1: Group settings
-    */
-	void GroupSettings(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
-    {
-		Param1<PM_Settings_Group> data;
-		Print("[PartyMe][Settings] Received");
-        if (!ctx.Read(data)) return;
-
-		PM_GetGroupSettings().Copy(data.param1)
-		Print("[PartyMe][Settings] Config received by server ! Limit: " + m_pm_settings_group.limit + " | CanShowHUD: "  + m_pm_settings_group.canShowHUD);
-	}
 };

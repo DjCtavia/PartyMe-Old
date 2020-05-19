@@ -7,7 +7,7 @@ class PM_C_Invitations extends PM_InvitationsHandler
 
 	void AddEvents()
 	{
-		PM_GetEvents().AddEvent("InvitationReceive", this);
+		PM_GetEvents().AddEvent("InvitationReceived", this);
 		PM_GetEvents().AddEvent("InvitationResponse", this);
 	}
 	
@@ -36,7 +36,7 @@ class PM_C_Invitations extends PM_InvitationsHandler
 	}
 	
 	// Events
-	void OnInvitationReceive(ref PM_Event_Params eventParams)
+	void OnInvitationReceived(ref PM_Event_Params eventParams)
 	{
 		string sender = eventParams.playerIdFrom;
 		string receiver = eventParams.playerIdTo;
