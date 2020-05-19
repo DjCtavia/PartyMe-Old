@@ -19,6 +19,16 @@ class PM_UI_Option_Playerlist extends PM_UI_Category
         super.ConfigureWidget();
         m_txt_optionName.SetText("Players");
     }
+	
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		if (super.OnClick(w, x, y, button) || m_menu.OnClick(w, x, y, button))
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 
@@ -106,6 +116,21 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
     {
 		RemovePlayer(eventParams.playerIdFrom);
     }
+	
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		for (int iWidget = 0; iWidget < m_players.Count(); iWidget++)
+		{
+			ref PM_UI_playerlist_PlayerWidget widget = m_players.Get(iWidget);
+			
+			if (widget && widget.OnClick(w, x, y, button))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 };
 
 class PM_UI_playerlist_PlayerWidget
