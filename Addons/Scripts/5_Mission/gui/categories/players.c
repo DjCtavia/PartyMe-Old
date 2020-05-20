@@ -19,14 +19,24 @@ class PM_UI_Option_Party extends PM_UI_Category
         super.ConfigureWidget();
         m_txt_optionName.SetText("Party");
     }
+	
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		if (super.OnClick(w, x, y, button) || m_menu.OnClick(w, x, y, button))
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class PM_UI_Menu_Party extends PM_UI_Menu
 {
-    protected ScrollWidget                          m_scroll_playerList;
-    protected ButtonWidget                          m_btn_leaveParty;
+    protected ScrollWidget                          	m_scroll_playerList;
+    protected ButtonWidget                          	m_btn_leaveParty;
 
-    protected ref array<ref PM_UI_party_PlayerWidget>     m_players;
+    protected ref array<ref PM_UI_party_PlayerWidget>	m_players;
 
     void PM_UI_Menu_Party(Widget parent)
     {
@@ -34,7 +44,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_party_PlayerWidget>;
         Init();
-        RetrievePlayersFromGroup()
+        RetrievePlayersFromGroup();
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
     }
 
@@ -98,7 +108,11 @@ class PM_UI_Menu_Party extends PM_UI_Menu
 
     void UpdateWidgetsPosition()
     {
-
+		for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
+        {
+			auto playerWidget = m_players.Get(indexWidget);
+			playerWidget.SetPosition(indexWidget);
+        }
     }
 
     // Events
@@ -107,6 +121,25 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         // Delayed call, the player must first exist in the group
         GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(AddPlayer, 10, false, eventParams.playerIdFrom);
     }
+
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		if (w == m_btn_leaveParty)
+		{
+			return true;
+		}
+		for (int iWidget = 0; iWidget < m_players.Count(); iWidget++)
+		{
+			ref PM_UI_party_PlayerWidget widget = m_players.Get(iWidget);
+			
+			if (widget && widget.OnClick(w, x, y, button))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 };
 
 class PM_UI_party_PlayerWidget

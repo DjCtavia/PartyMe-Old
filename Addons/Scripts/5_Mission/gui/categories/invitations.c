@@ -95,15 +95,10 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
     //--------------------------------------------------------------------------
     void UpdateWidgetsPosition()
     {
-        ref PM_UI_invitations_PlayerWidget playerWidget;
-
-        for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
+		for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
         {
-            playerWidget = m_players.Get(indexWidget);
-            if (playerWidget)
-            {
-                playerWidget.SetPosition(indexWidget);
-            }
+			auto playerWidget = m_players.Get(indexWidget);
+			playerWidget.SetPosition(indexWidget);
         }
     }
 	//-------------------------------------------------------------------------- Events
