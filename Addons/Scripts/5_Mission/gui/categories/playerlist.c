@@ -83,6 +83,7 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
 
         if (indexPlayer != -1)
         {
+			m_players.Get(indexPlayer).Destroy();
             m_players.Remove(indexPlayer);
             UpdateWidgetsPosition();
         }
@@ -187,6 +188,11 @@ class PM_UI_playerlist_PlayerWidget
 		m_btn_invite.Show(isEnable);
         m_img_invite.Show(isEnable);
     }
+	
+	void Destroy()
+	{
+		m_w_root.Unlink();
+	}
 
     //--------------------------------------------------------------------------
     string GetPlayerId()

@@ -41,6 +41,7 @@ modded class MissionServer
 
             if (identity)
             {
+				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveServer", new Param1<string>(identity.GetId()));
                 PM_GetGroupManager().CleanPlayer(identity.GetId());
             }
         }
