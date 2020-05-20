@@ -27,7 +27,7 @@ modded class MissionServer
         PM_GetGroupManager().SetPlayerIdentity(identity.GetId(), identity);
 
         // RPCs
-        //GetRPCManager().SendRPC("PartyMe", "PlayerJoinServer", new Param2<string, string>(identity.GetId(), identity.GetName()));
+        GetRPCManager().SendRPC("PartyMe", "PlayerJoinServer", new Param2<string, string>(identity.GetId(), identity.GetName()));
 		GetRPCManager().SendRPC("PartyMe", "GroupSettings", new Param1<PM_Settings_Group>(GetServerSettings().group), false, identity);
     }
 
