@@ -31,7 +31,6 @@ class PM_UI_Option_Playerlist extends PM_UI_Category
 	}
 };
 
-
 class PM_UI_Menu_Playerlist extends PM_UI_Menu
 {
     protected ScrollWidget                                  m_scroll_playerList;
@@ -185,6 +184,7 @@ class PM_UI_playerlist_PlayerWidget
     private void EnableInviteButton(bool isEnable)
     {
         m_btn_invite.Enable(isEnable);
+		m_btn_invite.Show(isEnable);
         m_img_invite.Show(isEnable);
     }
 
@@ -199,7 +199,7 @@ class PM_UI_playerlist_PlayerWidget
         return m_playerName;
     }
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- UI Events
     bool OnClick(Widget w, int x, int y, int button)
     {
         if (button == MouseState.LEFT)
@@ -213,7 +213,7 @@ class PM_UI_playerlist_PlayerWidget
         return false;
     }
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- UI Events Functions
     private void Invite()
     {
 		string playerId;

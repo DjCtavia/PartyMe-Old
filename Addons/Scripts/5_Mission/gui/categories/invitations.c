@@ -19,6 +19,16 @@ class PM_UI_Option_Invitations extends PM_UI_Category
         super.ConfigureWidget();
         m_txt_optionName.SetText("Invitations");
     }
+
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		if (super.OnClick(w, x, y, button) || m_menu.OnClick(w, x, y, button))
+		{
+			return true;
+		}
+		return false;
+	}
 };
 
 class PM_UI_Menu_Invitations extends PM_UI_Menu
@@ -104,6 +114,21 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 
 		AddPlayer(playerId, name);
 	}
+	
+	//-------------------------------------------------------------------------- UI Events
+	override bool OnClick(Widget w, int x, int y, int button)
+	{
+		for (int iWidget = 0; iWidget < m_players.Count(); iWidget++)
+		{
+			ref PM_UI_invitations_PlayerWidget widget = m_players.Get(iWidget);
+			
+			if (widget && widget.OnClick(w, x, y, button))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 };
 
 class PM_UI_invitations_PlayerWidget
@@ -169,4 +194,30 @@ class PM_UI_invitations_PlayerWidget
     {
         return m_playerName;
     }
+
+	//-------------------------------------------------------------------------- UI Events
+	bool OnClick(Widget w, int x, int y, int button)
+    {
+        if (button == MouseState.LEFT && !PM_GetGroup().IsInGroup())
+        {
+			switch (w)
+			{
+				case m_btn_accept:
+					InvitationResponse(true);
+					return true;
+				case m_btn_accept:
+					InvitationResponse(false);
+					return true;
+			}
+        }
+        return false;
+    }
+
+	//-------------------------------------------------------------------------- UI Events Functions
+	void InvitationResponse(bool response)
+	{
+		auto params = new Param2<string, bool>(m_playerId, response);
+
+		GetRPCManager().SendRPC("PartyMe", "InvitationResponse", params);
+	}
 };

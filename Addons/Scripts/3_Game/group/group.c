@@ -22,8 +22,10 @@ class PM_Group
     // Return if player is in group
     bool IsInGroup()
     {
-        if (!players || !players.Count())
-            return false;
+		if (!isLeader || players.Count() > 0)
+		{
+			return true;
+		}
         return true;
     }
 
