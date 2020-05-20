@@ -2,7 +2,7 @@ class PM_RPC_C_invites
 {
     void PM_RPC_C_invites()
     {
-        GetRPCManager().AddRPC("PartyMe", "InvitationReceivedd", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "InvitationReceived", this, SingleplayerExecutionType.Both);
         GetRPCManager().AddRPC("PartyMe", "InvitationResponse", this, SingleplayerExecutionType.Both);
     }
 
@@ -12,7 +12,7 @@ class PM_RPC_C_invites
         Event:
             playerIdFrom: ID of the inviting player
     */
-    void InvitationReceivedd(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+    void InvitationReceived(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
         Param2<string, string> data;
         if (!ctx.Read(data)) return;
