@@ -55,4 +55,13 @@ class PM_GroupMenu extends UIScriptedMenu
         }
         return false;
     }
+	
+	override bool OnMouseLeave(Widget w, Widget enterW, int x, int y)
+	{
+		if (m_group_context_menu.OnMouseLeave(w, enterW, x, y))
+        {
+            return true;
+        }
+        return false;
+	}
 };

@@ -108,6 +108,11 @@ class PM_GroupContextMenu : ScriptedWidgetEventHandler
 
    override bool OnMouseLeave(Widget w, Widget enterW, int x, int y)
    {
+		if (ButtonWidget.Cast(w))
+		{
+			SetFocus(m_group_context_menu_root_widget);
+			return true;
+		}
        foreach (ref PM_UI_Category option : m_options)
        {
            if (option.OnMouseLeave(w, enterW, x, y))
