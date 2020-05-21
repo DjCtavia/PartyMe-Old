@@ -15,6 +15,17 @@ bool PM_GetPlayerId(out string playerId)
     return false;
 }
 
+string PM_GetPlayerId()
+{
+	PlayerIdentity pId = GetGame().GetPlayer().GetIdentity();
+	
+	if (pId)
+	{
+		return pId.GetId();
+	}
+	return "";
+}
+
 bool PM_GetPlayerName(out string playerName)
 {
     PlayerBase playerPB = PlayerBase.Cast(GetGame().GetPlayer());

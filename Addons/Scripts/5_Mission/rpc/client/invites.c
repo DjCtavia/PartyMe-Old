@@ -20,6 +20,8 @@ class PM_RPC_C_invites
         ref PM_Event_Params eventParams = new PM_Event_Params;
         eventParams.playerIdFrom = data.param1;
 		eventParams.name = data.param2;
+		eventParams.playerIdTo = PM_GetPlayerId();
+
         PM_GetEvents().CallEvent("InvitationReceived", eventParams);
     }
 

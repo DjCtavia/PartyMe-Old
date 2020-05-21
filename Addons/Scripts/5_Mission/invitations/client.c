@@ -22,30 +22,10 @@ class PM_C_Invitations extends PM_InvitationsHandler
 		ref PM_Event_Params eventParams = new PM_Event_Params;
 
 		eventParams.playerIdFrom = sender;
-		Print("[PartyMe][InvitationsHandler] After invitation init.");
 		if (PM_GetPlayerUtilities().GetPlayerName(sender, eventParams.name))
 		{
-			Print("[PartyMe][InvitationsHandler] Sending event InvitationReceivedUI.");
 			PM_GetEvents().CallEvent("InvitationReceivedUI", eventParams);
 		}
-	}
-
-	bool HasInvited(string sender)
-	{
-		string receiverId;
-
-		if (PM_GetPlayerId(receiverId))
-		{
-			return super.HasInvited(sender, receiverId);
-		}
-		else
-		{
-			if (true) // Debug mode
-			{
-				Print("[PartyMe][Error] Invitation has been received, but couldn't get PlayerId!");
-			}
-		}
-		return false;
 	}
 	
 	//-------------------------------------------------------------------------- Events

@@ -42,9 +42,42 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_invitations_PlayerWidget>;
         Init();
+		InitInvitations();
 		AddEvents();
     }
 	
+	void InitInvitations()
+	{
+		ref PM_C_Invitations invitations = MissionGameplay.Cast(GetGame().GetMission()).m_pm_invitations;
+		string playerId;
+
+		Print("[PartyMe][UI][InviteList] Starting to init invitations: " + invitations);
+		if (invitations && PM_GetPlayerId(playerId))
+		{
+			ref array<string> playersInvitations = invitations.m_invitations.Get(playerId);
+
+			Print("[PartyMe][UI][InviteList] Getting invitations: " + playersInvitations);
+			if (playersInvitations)
+			{
+				Print("[PartyMe][UI][InviteList] Number of invitations found: " + playersInvitations.Count());
+				for (int iPlayer = 0; iPlayer < playersInvitations.Count(); iPlayer++)
+				{
+					string pId = playersInvitations.Get(iPlayer);
+					string pName;
+					
+					if (PM_GetPlayerUtilities().GetPlayerName(pId, pName))
+					{
+						AddPlayer(pId, pName);
+					}
+					else
+					{
+						AddPlayer(pId, "Unknown name");
+					}
+				}
+			}
+		}
+	}
+
 	void AddEvents()
 	{
 		PM_GetEvents().AddEvent("InvitationReceivedUI", this);
@@ -74,7 +107,6 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
     {
         if (FindPlayer(playerId) == -1)
         {
-			Print("[PartyMe][UI][Invitation] Currently adding player: " + playerId + "(" + playerName + ")");
             auto playerWidget = new PM_UI_invitations_PlayerWidget(m_scroll_playerList, playerId, playerName);
             int pos = m_players.Count();
             m_players.Insert(playerWidget);

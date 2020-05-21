@@ -29,7 +29,6 @@ class PM_InvitationsHandler
 
 	void InvitePlayer(string sender, string receiver)
 	{
-		Print("[PartyMe][Invite] An invite has been received. " + !HasInvited(sender, receiver) + " | " + ConditionnalInvitation(sender, receiver));
 		if (!HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
 		{
 			ref array<string> invitationsList = m_invitations.Get(receiver);
