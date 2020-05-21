@@ -47,7 +47,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 	
 	void AddEvents()
 	{
-		PM_GetEvents().AddEvent("InvitationReceived", this);
+		PM_GetEvents().AddEvent("InvitationReceivedUI", this);
 	}
 
     override void GetWidgets()
@@ -74,6 +74,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
     {
         if (FindPlayer(playerId) == -1)
         {
+			Print("[PartyMe][UI][Invitation] Currently adding player: " + playerId + "(" + playerName + ")");
             auto playerWidget = new PM_UI_invitations_PlayerWidget(m_scroll_playerList, playerId, playerName);
             int pos = m_players.Count();
             m_players.Insert(playerWidget);
@@ -102,7 +103,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
         }
     }
 	//-------------------------------------------------------------------------- Events
-    void OnInvitationReceived(ref PM_Event_Params eventParams)
+    void OnInvitationReceivedUI(ref PM_Event_Params eventParams)
     {
 		string playerId = eventParams.playerIdFrom;
 		string name = eventParams.name;

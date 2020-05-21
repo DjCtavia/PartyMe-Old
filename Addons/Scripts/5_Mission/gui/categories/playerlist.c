@@ -244,14 +244,13 @@ class PM_UI_playerlist_PlayerWidget
     //-------------------------------------------------------------------------- UI Events Functions
     private void Invite()
     {
-		string playerId;
 		string playerName;
 
         EnableInviteButton(false);
         GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(EnableInviteButton, INVITE_DELAY, false, true);
-		if (PM_GetPlayerIdAndName(playerId, playerName))
+		if (PM_GetPlayerName(playerName))
 		{
-			GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(playerId, playerName));
+			GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(m_playerId, playerName));
 		}
     }
 };
