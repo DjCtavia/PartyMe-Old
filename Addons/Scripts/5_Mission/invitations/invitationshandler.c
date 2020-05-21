@@ -1,7 +1,7 @@
 class PM_InvitationsHandler
 {
 	ref map<string, ref array<string>> m_invitations;
-
+	
 	void PM_InvitationsHandler()
 	{
 		m_invitations = new map<string, ref array<string>>;
@@ -10,8 +10,13 @@ class PM_InvitationsHandler
 	bool HasInvited(string sender, string receiver)
 	{
 		ref array<string> invitationsList = m_invitations.Get(receiver);
-		
-		if (invitationsList && invitationsList.Find(sender) > -1)
+
+		if (!invitationsList)
+		{
+			m_invitations.Set(receiver, new array<string>);
+			return false;
+		}
+		else if (invitationsList && invitationsList.Find(sender) > -1)
 		{
 			return true;
 		}
@@ -24,10 +29,11 @@ class PM_InvitationsHandler
 
 	void InvitePlayer(string sender, string receiver)
 	{
-		ref array<string> invitationsList = m_invitations.Get(receiver);
-		
-		if (invitationsList && !HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
+		Print("[PartyMe][Invite] An invite has been received. " + !HasInvited(sender, receiver) + " | " + ConditionnalInvitation(sender, receiver));
+		if (!HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
 		{
+			ref array<string> invitationsList = m_invitations.Get(receiver);
+
 			BeforeInvitation(sender, receiver);
 			invitationsList.Insert(sender);
 			AfterInvitation(sender, receiver);

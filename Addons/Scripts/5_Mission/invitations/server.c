@@ -20,10 +20,11 @@ class PM_S_Invitations extends PM_InvitationsHandler
 	override void AfterInvitation(string sender, string receiver)
 	{
 		PlayerIdentity receiverIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(receiver);
+		PlayerIdentity senderIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(sender);
 		
-		if (receiverIdentity)
+		if (senderIdentity && receiverIdentity)
 		{
-			GetRPCManager().SendRPC("PartyMe", "ReceiveInvite", new Param1<string>(sender));
+			GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(sender, senderIdentity.GetName()), false, receiverIdentity);
 		}
 		else if (!receiverIdentity && true) // debug mode
 		{
@@ -37,6 +38,7 @@ class PM_S_Invitations extends PM_InvitationsHandler
 		string sender = eventParams.playerIdFrom;
 		string receiver = eventParams.playerIdTo;
 
+		Print("[PartyMe][InvitationsHandler][Event] OnInvitationReceived has been called. " + sender + " | " + receiver);
 		InvitePlayer(sender, receiver);
 	}
 	

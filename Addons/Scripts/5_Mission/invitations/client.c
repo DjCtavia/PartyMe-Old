@@ -10,11 +10,24 @@ class PM_C_Invitations extends PM_InvitationsHandler
 		PM_GetEvents().AddEvent("InvitationReceived", this);
 		PM_GetEvents().AddEvent("InvitationResponse", this);
 	}
-	
+
 	override bool ConditionnalInvitation(string sender, string receiver)
 	{
 		// Check size of group
 		return true;
+	}
+	
+	override void AfterInvitation(string sender, string receiver)
+	{
+		ref PM_Event_Params eventParams = new PM_Event_Params;
+
+		eventParams.playerIdFrom = sender;
+		Print("[PartyMe][InvitationsHandler] After invitation init.");
+		if (PM_GetPlayerUtilities().GetPlayerName(sender, eventParams.name))
+		{
+			Print("[PartyMe][InvitationsHandler] Sending event InvitationReceivedUI.");
+			PM_GetEvents().CallEvent("InvitationReceivedUI", eventParams);
+		}
 	}
 
 	bool HasInvited(string sender)
@@ -35,7 +48,7 @@ class PM_C_Invitations extends PM_InvitationsHandler
 		return false;
 	}
 	
-	// Events
+	//-------------------------------------------------------------------------- Events
 	void OnInvitationReceived(ref PM_Event_Params eventParams)
 	{
 		string sender = eventParams.playerIdFrom;
