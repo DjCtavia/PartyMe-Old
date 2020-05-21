@@ -1,13 +1,20 @@
 class PM_RPC_C_handler
 {
     private ref PM_RPC_C_group                  m_group;
+	private ref PM_RPC_C_invites				m_invites;
 
     void PM_RPC_C_handler()
     {
-        GetRPCManager().AddRPC("PartyMe", "PlayerJoinServer", this, SingleplayerExecutionType.Both);
-        GetRPCManager().AddRPC("PartyMe", "PlayerLeaveServer", this, SingleplayerExecutionType.Both);
+		AddRPC();
         m_group = new PM_RPC_C_group;
+		m_invites = new PM_RPC_C_invites;
     }
+	
+	void AddRPC()
+	{
+		GetRPCManager().AddRPC("PartyMe", "PlayerJoinServer", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "PlayerLeaveServer", this, SingleplayerExecutionType.Both);
+	}
 
     /*
         Description:

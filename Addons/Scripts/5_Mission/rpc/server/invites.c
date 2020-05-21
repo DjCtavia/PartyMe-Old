@@ -18,8 +18,10 @@ class PM_RPC_S_invites
         if (!ctx.Read(data)) return;
 
         ref PM_Event_Params eventParams = new PM_Event_Params;
-        eventParams.playerIdFrom = data.param1;
+        eventParams.playerIdFrom = sender.GetId();
 		eventParams.name = data.param2;
+		eventParams.playerIdTo = data.param1;
+		Print("[PartyMe][RPC] InvitationReceived");
         PM_GetEvents().CallEvent("InvitationReceived", eventParams);
     }
 
