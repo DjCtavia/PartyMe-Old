@@ -3,7 +3,6 @@
 */
 modded class MissionGameplay
 {
-	ref map<string, string>				m_pm_playersName;
     ref PM_GroupMenu                    m_pm_groupMenu;
 	ref PM_RPC_C_handler                m_pm_rpc_handler;
 	ref PM_Settings_Group				m_pm_settings_group;
@@ -16,7 +15,6 @@ modded class MissionGameplay
 
     void InitPartyMe()
     {
-		m_pm_playersName = new map<string, string>;
         m_pm_rpc_handler = new PM_RPC_C_handler;
 		m_pm_settings_group = new PM_Settings_Group;
 		m_pm_invitations = new PM_C_Invitations;

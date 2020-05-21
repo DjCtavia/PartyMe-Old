@@ -42,9 +42,9 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_playerlist_PlayerWidget>;
         Init();
+		InitPlayerList();
         PM_GetEvents().AddEvent("PlayerJoinServer", this);
 		PM_GetEvents().AddEvent("PlayerLeaveServer", this);
-		GetRPCManager().SendRPC("PartyMe", "InitPlayerList");
     }
 
     override void GetWidgets()
@@ -52,6 +52,26 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         super.GetWidgets();
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
     }
+
+	void InitPlayerList()
+	{
+		string ownPlayerId;
+		ref array<PlayerIdentity> players = new array<PlayerIdentity>;
+
+		GetGame().GetPlayerIndentities(players);	
+		for (int i = 0; i < players.Count(); i++)
+		{
+			PlayerIdentity playerIdentity = players[i];
+
+			if (playerIdentity)
+			{	
+				string playerId = playerIdentity.GetId();		
+				string playerName = playerIdentity.GetName();
+
+				AddPlayer(playerId, playerName);
+			}
+		}
+	}
 
     //--------------------------------------------------------------------------
     int FindPlayer(string playerId)
@@ -69,7 +89,9 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
 
     void AddPlayer(string playerId, string playerName)
     {
-        if (FindPlayer(playerId) == -1)
+		string ownPlayerId;
+
+        if (FindPlayer(playerId) == -1 && PM_GetPlayerId(ownPlayerId) && playerId != ownPlayerId)
         {
             auto playerWidget = new PM_UI_playerlist_PlayerWidget(m_scroll_playerList, playerId, playerName);
             int pos = m_players.Insert(playerWidget);

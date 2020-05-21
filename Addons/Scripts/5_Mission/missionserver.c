@@ -14,7 +14,6 @@ modded class MissionServer
 		m_pm_invitations = new PM_S_Invitations;
         PM_GetGroupManager();
         PM_Server_GetGroupPositionUpdater();
-		GetRPCManager().AddRPC("PartyMe", "InitPlayerList", this, SingleplayerExecutionType.Both);
     }
 
     override void InvokeOnConnect(PlayerBase player, PlayerIdentity identity)
@@ -53,26 +52,6 @@ modded class MissionServer
 
         // We reasign the PlayerBase for constant update later.
         PM_GetGroupManager().SetPlayerEntity(identity.GetId(), player);
-    }
-
-	//--------------------------------------------------------------------------
-	void InitPlayerList(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
-    {
-		ref array<string> playersId = new array<string>;
-		ref array<string> playersName = new array<string>;
-		ref array<Man> players = new array<Man>;
-		GetGame().GetPlayers( players );
-		
-		for (int iMan = 0; iMan < players.Count(); iMan++)
-		{
-			PlayerIdentity playerIdentity = players.Get(iMan).GetIdentity();
-			if (playerIdentity && playerIdentity.GetId() != sender.GetId())
-			{
-				playersId.Insert(playerIdentity.GetId());
-				playersName.Insert(playerIdentity.GetName());
-			}
-		}
-		GetRPCManager().SendRPC("PartyMe", "InitPlayerList", new Param2<array<string>, array<string>>(playersId, playersName), false, sender);
     }
 
 	//-------------------------------------------------------------------------- Utils
