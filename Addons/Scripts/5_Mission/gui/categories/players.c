@@ -44,28 +44,36 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         m_w_parent = parent;
         m_players = new array<ref PM_UI_party_PlayerWidget>;
         Init();
-        RetrievePlayersFromGroup();
+		InitPlayersGroup();
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
     }
+
+	/*
+		Note:
+			This method is only useful in specific cases. In standard use, it is of no use at all.
+			A player needs to open the menu at least once to accept an invitation, so initializing
+			this method is only useful for a permanent group system, for example.
+	*/
+	void InitPlayersGroup()
+	{
+		array<PM_Player_Infos_t> members = PM_GetGroup().GetPlayers();
+
+		for (int iMember = 0; iMember < members.Count(); iMember++)
+		{
+			auto member = members.Get(iMember);
+			
+			if (member)
+			{
+				AddPlayer(member.id, member.name);
+			}
+		}
+	}
 
     override void GetWidgets()
     {
         super.GetWidgets();
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
         m_btn_leaveParty = ButtonWidget.Cast(m_w_root.FindAnyWidget("leaveParty"));
-    }
-
-    void RetrievePlayersFromGroup()
-    {
-        array<string> playerIDs = PM_GetGroup().players.GetKeyArray();
-
-        if (playerIDs)
-        {
-            foreach (string playerId : playerIDs)
-            {
-                AddPlayer(playerId);
-            }
-        }
     }
 
     void SetWidgetPlayerPosition(int index)
@@ -86,12 +94,13 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         return -1;
     }
 
-    void AddPlayer(string playerId)
+    void AddPlayer(string playerId, string playerName)
     {
         if (FindPlayer(playerId) == -1)
         {
-            int pos = m_players.Count();
-            m_players.Insert(new PM_UI_party_PlayerWidget(m_w_parent, m_scroll_playerList, playerId, pos));
+			auto playerWidget = new PM_UI_party_PlayerWidget(m_w_parent, m_scroll_playerList, playerId, playerName);
+            int pos = m_players.Insert(playerWidget);
+            playerWidget.SetPosition(pos);
         }
     }
 
@@ -115,11 +124,10 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         }
     }
 
-    // Events
+    //-------------------------------------------------------------------------- Events
     void OnPlayerJoinGroup(PM_Event_Params eventParams)
     {
-        // Delayed call, the player must first exist in the group
-        GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(AddPlayer, 10, false, eventParams.playerIdFrom);
+        AddPlayer(eventParams.playerIdFrom, eventParams.name);
     }
 
 	//-------------------------------------------------------------------------- UI Events
@@ -156,15 +164,17 @@ class PM_UI_party_PlayerWidget
     ImageWidget                                         m_img_leadOptions;
 
     string                                              m_playerId;
+	string                                              m_playerName;
 
-    void PM_UI_party_PlayerWidget(Widget master, Widget parent, string playerId, int arrayPosition)
+    void PM_UI_party_PlayerWidget(Widget master, Widget parent, string playerId, string playerName)
     {
         m_playerId = playerId;
+		m_playerName = playerName;
+		m_w_parent = master;
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, parent);
         GetWidgets();
         InitIcons();
         RetrievePlayerInfos();
-        SetPosition(arrayPosition);
     }
 
     void ~PM_UI_party_PlayerWidget()
@@ -186,34 +196,39 @@ class PM_UI_party_PlayerWidget
         m_img_SHMarker.LoadImageFile(0, ICON_SHOWHIDE_MARKER);
         m_img_leadOptions.LoadImageFile(0, ICON_MORE_OPTIONS);
     }
-
-    //--------------------------------------------------------------------------
-    void RetrievePlayerInfos()
-    {
-        ref PM_Player_Infos_t playersInfos = PM_GetGroup().players.Get(m_playerId);
-
-        if (playersInfos)
-        {
-            m_txt_playerName.SetText(playersInfos.name);
-        }
-        else
-        {
-            m_txt_playerName.SetText("Player not found");
-        }
-    }
-
-    //--------------------------------------------------------------------------
-    string GetPlayerId()
-    {
-        return m_playerId;
-    }
-
-    //--------------------------------------------------------------------------
-    void SetPosition(int index)
+	
+	void SetPosition(int index)
     {
         m_w_root.SetPos(50, (40 + 65 * index));
     }
 
+    //--------------------------------------------------------------------------
+    void RetrievePlayerInfos()
+    {
+        string playerName;
+
+        if (PM_GetPlayerUtilities().GetPlayerName(m_playerId, playerName))
+        {
+            m_txt_playerName.SetText(playerName);
+        }
+        else
+        {
+            m_txt_playerName.SetText("Unknow name");
+        }
+    }
+
+    //-------------------------------------------------------------------------- Getters
+    string GetPlayerId()
+    {
+        return m_playerId;
+    }
+	
+	string GetPlayerName()
+    {
+        return m_playerName;
+    }
+
+    //-------------------------------------------------------------------------- UI Events
     bool OnClick(Widget w, int x, int y, int button)
     {
         if (button == MouseState.LEFT)
@@ -225,7 +240,7 @@ class PM_UI_party_PlayerWidget
         }
        return false;
     }
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- UI Events Functions
     void OpenLeadOptions()
     {
 

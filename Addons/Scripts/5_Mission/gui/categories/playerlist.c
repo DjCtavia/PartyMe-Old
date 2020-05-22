@@ -216,7 +216,7 @@ class PM_UI_playerlist_PlayerWidget
 		m_w_root.Unlink();
 	}
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- Getters
     string GetPlayerId()
     {
         return m_playerId;

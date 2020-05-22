@@ -130,8 +130,14 @@ class PM_Group
             players.Clear();
         }
     }
+	
+	//-------------------------------------------------------------------------- Getters
+	array<PM_Player_Infos_t> GetPlayers()
+	{
+		return players.GetValueArray();
+	}
 
-    // Events
+    //-------------------------------------------------------------------------- Events
     void OnPlayerJoinGroup(PM_Event_Params eventParams)
     {
         AddPlayer(eventParams.playerIdFrom, eventParams.name, eventParams.position, eventParams.health);
