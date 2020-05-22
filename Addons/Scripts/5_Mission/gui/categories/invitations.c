@@ -226,6 +226,7 @@ class PM_UI_invitations_PlayerWidget
 	//-------------------------------------------------------------------------- UI Events
 	bool OnClick(Widget w, int x, int y, int button)
     {
+		/*
         if (button == MouseState.LEFT && !PM_GetGroup().IsInGroup())
         {
 			switch (w)
@@ -233,11 +234,26 @@ class PM_UI_invitations_PlayerWidget
 				case m_btn_accept:
 					InvitationResponse(true);
 					return true;
-				case m_btn_accept:
+				case m_btn_decline:
 					InvitationResponse(false);
 					return true;
 			}
         }
+		*/
+		if (button == MouseState.LEFT)
+		{
+			Print("[PartyMe][UI]PlayerInvite widget click");
+			if (w == m_btn_accept)
+			{
+				InvitationResponse(true);
+				return true;
+			}
+			if (w == m_btn_decline)
+			{
+				InvitationResponse(false);
+				return true;
+			}
+		}
         return false;
     }
 
@@ -246,6 +262,7 @@ class PM_UI_invitations_PlayerWidget
 	{
 		auto params = new Param2<string, bool>(m_playerId, response);
 
+		Print("[PartyMe][UI]PlayerInvite widget sending RPC");
 		GetRPCManager().SendRPC("PartyMe", "InvitationResponse", params);
 	}
 };

@@ -31,6 +31,7 @@ class PM_RPC_S_invites
         Event:
             playerIdFrom: ID of the player accepting the invitation
 			answer: Has accept invitation or no
+			playerIdTo: ID of the party owner
     */
     void InvitationResponse(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
     {
@@ -38,8 +39,9 @@ class PM_RPC_S_invites
         if (!ctx.Read(data)) return;
 		ref PM_Event_Params eventParams = new PM_Event_Params;
 
-		eventParams.playerIdFrom = data.param1;
+		eventParams.playerIdFrom = sender.GetId();
 		eventParams.answer = data.param2;
+		eventParams.playerIdTo = data.param1;
 		PM_GetEvents().CallEvent("InvitationResponse", eventParams);
     }
 };

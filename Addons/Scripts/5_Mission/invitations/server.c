@@ -48,17 +48,19 @@ class PM_S_Invitations extends PM_InvitationsHandler
 		string receiver = eventParams.playerIdFrom;
 		bool hasAccepted = eventParams.answer;
 
-		if (HasInvited(sender, receiver))
+		if (!hasAccepted)
 		{
-			if (hasAccepted)
+			GetRPCManager().SendRPC("PartyMe", "InvitationResponse", new Param2<string, bool>(sender, false));
+			RemovePlayerInvite(sender, receiver);
+		}
+		else
+		{
+			if (HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
 			{
 				GetRPCManager().SendRPC("PartyMe", "InvitationResponse", new Param2<string, bool>(sender, true));
+				RemovePlayerInvite(sender, receiver);
+				PM_GetEvents().CallEvent("PlayerJoinGroup", eventParams);
 			}
-			else
-			{
-				GetRPCManager().SendRPC("PartyMe", "InvitationResponse", new Param2<string, bool>(sender, false));
-			}
-			RemovePlayerInvite(sender, receiver);
 		}
 	}
 };

@@ -120,7 +120,7 @@ class PM_GroupContextMenu : ScriptedWidgetEventHandler
                return true;
            }
        }
-       if (m_option_displayed.OnMouseLeave(w, enterW, x, y))
+       if (m_option_displayed && m_option_displayed.OnMouseLeave(w, enterW, x, y))
        {
            return true;
        }
