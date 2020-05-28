@@ -5,6 +5,12 @@ class PM_InvitationsHandler
 	void PM_InvitationsHandler()
 	{
 		m_invitations = new map<string, ref array<string>>;
+		AddEvents();
+	}
+	
+	void AddEvents()
+	{
+		PM_GetEvents().AddEvent("OnPlayerDisconnect", this);
 	}
 
 	bool HasInvited(string sender, string receiver)
@@ -47,5 +53,21 @@ class PM_InvitationsHandler
 		{
 			invitationsList.RemoveItem(sender);
 		}
+	}
+	
+	void CleanInvitationFromId(string sender)
+	{
+		array<string> receivers = m_invitations.GetKeyArray();
+		
+		for (int iReceiver = 0; iReceiver < receivers.Count(); iReceiver++)
+		{
+			RemovePlayerInvite(sender, receivers[iReceiver]);
+		}
+	}
+
+	//-------------------------------------------------------------------------- Events
+	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
+	{
+		CleanInvitationFromId(eventParams.playerIdFrom);
 	}
 };

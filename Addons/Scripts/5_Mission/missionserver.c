@@ -40,8 +40,11 @@ modded class MissionServer
 
             if (identity)
             {
+				ref PM_Event_Params eventParams = new PM_Event_Params;
+        		eventParams.playerIdFrom = sender.GetId();
+
 				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveServer", new Param1<string>(identity.GetId()));
-                PM_GetGroupManager().CleanPlayer(identity.GetId());
+				PM_GetEvents().CallEvent("PlayerDisconnect", eventParams);
             }
         }
 	}
