@@ -59,7 +59,7 @@ class PM_Group
             member.position = position;
             member.health = health;
             member.w_marker = new PM_Marker_Widget();
-            member.isLocal = false;
+            member.isLocal = true;
             players.Set(id, member);
             Print("[PartyMe] Joueur crée" + players.ToString());
             return true;

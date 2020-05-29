@@ -2,18 +2,16 @@ modded class MissionServer
 {
     ref PM_RPC_S_handler                	m_pm_rpc_handler;
 	ref PM_S_Invitations					m_pm_invitations;
-	ref PM_Server_Group_Position_Updater 	m_pm_group_pos_updater;
 
-    void MissionServer()
-    {
-        InitPartyMe();
-    }
+	void MissionServer()
+	{
+		InitPartyMe();
+	}
 
     void InitPartyMe()
     {
         m_pm_rpc_handler = new PM_RPC_S_handler;
 		m_pm_invitations = new PM_S_Invitations;
-		m_pm_group_pos_updater = new PM_Server_Group_Position_Updater;
         PM_GetGroupManager();
         PM_Server_GetGroupPositionUpdater();
     }

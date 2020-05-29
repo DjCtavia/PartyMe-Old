@@ -33,15 +33,4 @@ class PM_RPC_C_group
 		Print("[PartyMe][RPC] PlayerJoinGroup | " + eventParams.playerIdFrom + " | " + eventParams.name + " | " + eventParams.position + " | " + eventParams.health);
 		PM_GetEvents().CallEvent("PlayerJoinGroup", eventParams);
     }
-	
-	void UpdatePlayerPositionNetwork(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
-	{
-		Param2<string, vector> data;
-		if (!ctx.Read(data)) return;
-
-		ref PM_Event_Params eventParams = new PM_Event_Params;
-		eventParams.playerIdFrom = data.param1;
-		eventParams.position = data.param2;
-		PM_GetEvents().CallEvent("UpdatePlayerPosition", eventParams);
-	}
 };
