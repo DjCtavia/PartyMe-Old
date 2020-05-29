@@ -1,13 +1,14 @@
 class PM_Server_Group_Position_Updater
 {
     private ScriptCallQueue timer;
-    protected ref map<string, ref array<string>> playerAskingPositions;
+    protected ref map<string, ref array<string>> playerAskingPositionIds;
 
     void PM_Server_Group_Position_Updater()
     {
-        playerAskingPositions = new map<string, ref array<string>>;
+        playerAskingPositionIds = new map<string, ref array<string>>;
         timer = GetGame().GetCallQueue(CALL_CATEGORY_SYSTEM);
         timer.CallLater(Update, 1250, true);
+		AddEvents();
         AddRPCs();
         Print("[PM] PM_Group_Position_Updater_Server created");
     }
@@ -16,9 +17,14 @@ class PM_Server_Group_Position_Updater
     {
         Print("[PM] PM_Group_Position_Updater_Server destroyed");
     }
+	
+	private void AddEvents()
+	{
+		PM_GetEvents().AddEvent("PlayerDisconnect", this);
+	}
 
     // RPC section
-    protected void AddRPCs()
+    private void AddRPCs()
     {
         GetRPCManager().AddRPC("PartyMe", "AskPlayerPositionUpdate", this, SingleplayerExecutionType.Both);
         GetRPCManager().AddRPC("PartyMe", "RemovePlayerPositionUpdate", this, SingleplayerExecutionType.Both);
@@ -41,43 +47,40 @@ class PM_Server_Group_Position_Updater
     }
 
     // Utility section
-    protected bool AskPositionUpdate(string playerAskingId, string otherId)
+    protected bool AskPositionUpdate(string playerAskingPositionId, string otherId)
     {
         ref array<string> players;
 
-        if (IsAskingPosition(playerAskingId, otherId))
+        if (IsAskingPosition(playerAskingPositionId, otherId))
             return false;
-        if (!playerAskingPositions.Get(otherId))
+        if (!playerAskingPositionIds.Get(otherId))
         {
             players = new array<string>;
-            playerAskingPositions.Set(otherId, players);
+            playerAskingPositionIds.Set(otherId, players);
         }
-        players.Insert(playerAskingId);
+        players.Insert(playerAskingPositionId);
         return true;
     }
 
-    protected bool RemovePositionUpdate(string playerWhoAskedId, string otherId)
+    protected bool RemovePositionUpdate(string playerAskingPositionId, string otherId)
     {
-        ref array<string> players;
+        ref array<string> players = playerAskingPositionIds.Get(otherId);
         
-        if (IsAskingPosition(playerWhoAskedId, otherId))
-        {
-            players = playerAskingPositions.Get(otherId);
-            players.Remove(players.Find(playerWhoAskedId));
+		if (players)
+		{
+            players.RemoveItem(playerAskingPositionId);
             if (players.Count() == 0)
-            {
-                playerAskingPositions.Remove(otherId);
-            }
+                playerAskingPositionIds.Remove(otherId);
             return true;
         }
         return false;
     }
 
-    bool IsAskingPosition(string playerAskingId, string otherId)
+    bool IsAskingPosition(string playerAskingPositionId, string otherId)
     {
-        ref array<string> players = playerAskingPositions.Get(otherId);
+        ref array<string> players = playerAskingPositionIds.Get(otherId);
 
-        if (players && players.Find(playerAskingId) != -1)
+        if (players && players.Find(playerAskingPositionId) != -1)
             return true;
         return false;
     }
@@ -102,7 +105,7 @@ class PM_Server_Group_Position_Updater
         {
             vector position = "0 0 0";
             PlayerBase player = groupManager.GetPlayerEntity(playerDataId);
-            ref array<string> playersToSendPosition = playerAskingPositions.Get(playerDataId);
+            ref array<string> playersToSendPosition = playerAskingPositionIds.Get(playerDataId);
 
             if (player)
                 position = player.GetPosition();
@@ -119,9 +122,23 @@ class PM_Server_Group_Position_Updater
 
     protected void SendPositionRPC(PlayerIdentity identity, string playerDataId, vector position)
     {
-        Print("[PM] Position of " + playerDataId + " has been sent through RPC to " + identity.GetId());
-        GetRPCManager().SendRPC("PartyMe", "UpdatePlayerPositionNetwork", new Param2<string, vector>(playerDataId, position), false, identity);
+		if (identity)
+		{
+        	Print("[PM] Position of " + playerDataId + " has been sent through RPC to " + identity.GetId());
+        	GetRPCManager().SendRPC("PartyMe", "UpdatePlayerPositionNetwork", new Param2<string, vector>(playerDataId, position), false, identity);
+		}
     }
+	
+	//-------------------------------------------------------------------------- Events
+	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
+	{
+		array<string> players = playerAskingPositionIds.GetKeyArray();
+		ref array<string> askers;
+		
+		foreach (string player : players)
+			RemovePositionUpdate(eventParams.playerIdFrom, player);
+		playerAskingPositionIds.Remove(eventParams.playerIdFrom);
+	}
 };
 
 static ref PM_Server_Group_Position_Updater g_PM_server_group_position_updater;
