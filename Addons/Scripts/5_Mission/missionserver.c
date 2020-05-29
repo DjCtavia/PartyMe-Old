@@ -1,7 +1,8 @@
 modded class MissionServer
 {
-    ref PM_RPC_S_handler                m_pm_rpc_handler;
-	ref PM_S_Invitations				m_pm_invitations;
+    ref PM_RPC_S_handler                	m_pm_rpc_handler;
+	ref PM_S_Invitations					m_pm_invitations;
+	ref PM_Server_Group_Position_Updater 	m_pm_group_pos_updater;
 
     void MissionServer()
     {
@@ -12,6 +13,7 @@ modded class MissionServer
     {
         m_pm_rpc_handler = new PM_RPC_S_handler;
 		m_pm_invitations = new PM_S_Invitations;
+		m_pm_group_pos_updater = new PM_Server_Group_Position_Updater;
         PM_GetGroupManager();
         PM_Server_GetGroupPositionUpdater();
     }
@@ -41,7 +43,7 @@ modded class MissionServer
             if (identity)
             {
 				ref PM_Event_Params eventParams = new PM_Event_Params;
-        		eventParams.playerIdFrom = sender.GetId();
+        		eventParams.playerIdFrom = identity.GetId();
 
 				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveServer", new Param1<string>(identity.GetId()));
 				PM_GetEvents().CallEvent("PlayerDisconnect", eventParams);

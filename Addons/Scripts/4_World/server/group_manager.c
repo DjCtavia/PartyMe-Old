@@ -11,112 +11,121 @@ class PM_Group_Manager
         playerEntities = new map<string, PlayerBase>;
         playerIdentities = new map<string, PlayerIdentity>;
         groups = new map<string, ref array<string>>;
-		AddRPCs();
 		AddEvents();
-    }
-
-    void AddRPCs()
-    {
-        GetRPCManager().AddRPC("PartyMe", "PlayerLeaveGroup", this, SingleplayerExecutionType.Both);
-        GetRPCManager().AddRPC("PartyMe", "PlayerKickedFromGroup", this, SingleplayerExecutionType.Both);
     }
 	
 	void AddEvents()
 	{
 		PM_GetEvents().AddEvent("PlayerJoinGroup", this);
+		PM_GetEvents().AddEvent("PlayerDisconnect", this);
 	}
 
-    /*
-        Data:
-            Param1: Identifier of the player leaving the group
-    */
-    void PlayerLeaveGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
-    {
-        Param1<string> data;
-        if (!ctx.Read( data )) return;
+	//-------------------------------------------------------------------------- User infos
+	bool IsLeader(string playerId)
+	{
+		string ownerId = playerGroup.Get(playerId);
+		
+		if (ownerId != string.Empty && ownerId != playerId)
+		{
+			return false;
+		}
+		return true;
+	}
 
-        
+	string GetPlayerGroupId(string playerId)
+    {
+        return playerGroup.Get(playerId);
     }
 
-    /*
-        Data:
-            Param1: Player leaving the group
-            Param2: Player to kick
-    */
-    void PlayerKickedFromGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+	PlayerBase GetPlayerEntity(string playerId)
     {
-        Param2<string, string> data;
-        if (!ctx.Read(data)) return;
-
-        
+        return playerEntities.Get(playerId);
     }
 
-    /*
-        Getter / Setter
-    */
-   // Mostly used when player disconnect
-   void CleanPlayer(string playerId)
-   {
-       playerGroup.Remove(playerId);
-       playerEntities.Remove(playerId);
-       playerIdentities.Remove(playerId);
-       //groups
-   }
-
-    /*****
-     *  Player group
-    *****/
-    // Attribute a group to player
-    void SetPlayerGroup(string joinerId, string groupOwnerId)
+	PlayerIdentity GetPlayerIdentity(string playerId)
     {
-        if (!playerGroup.Contains(joinerId) || playerGroup.Get(joinerId) == string.Empty || groupOwnerId == string.Empty)
+        return playerIdentities.Get(playerId);
+    }
+
+	//-------------------------------------------------------------------------- Set user infos
+	void SetPlayerEntity(string playerId, PlayerBase playerEntity)
+    {
+        playerEntities.Set(playerId, playerEntity);
+    }
+
+	void SetPlayerIdentity(string playerId, PlayerIdentity identity)
+    {
+        playerIdentities.Set(playerId, identity);
+    }
+	
+	void SetPlayerGroup(string joinerId, string ownerId)
+    {
+        if (!playerGroup.Contains(joinerId) || playerGroup.Get(joinerId) == string.Empty || ownerId == string.Empty)
         {
             ref array<string> groupArray;
 
-            if (!groups.Contains(groupOwnerId))
+            if (!groups.Contains(ownerId))
             {
 				groupArray = new array<string>;
-				groupArray.Insert(groupOwnerId);
-                groups.Set(groupOwnerId, groupArray);
-				playerGroup.Set(groupOwnerId, groupOwnerId);
+				groupArray.Insert(ownerId);
+                groups.Set(ownerId, groupArray);
+				playerGroup.Set(ownerId, ownerId);
             }
-			groupArray = groups.Get(groupOwnerId);
+			groupArray = groups.Get(ownerId);
             if (groupArray.Find(joinerId) == -1)
             {
                 groupArray.Insert(joinerId);
-				UpdateGroup(joinerId, groupOwnerId);
+				SendInformationsOfJoiningMember(joinerId, ownerId);
             }
-            Print("[PM] Player " + joinerId + " joined " + groupOwnerId + " group.");
-        }
-        else
-        {
-            Print("[PM] Player " + joinerId + " can't be assigned to " + groupOwnerId + " group." + "Already in group of " + playerGroup.Get(joinerId));
+            Print("[PM] Player " + joinerId + " joined " + ownerId + " group.");
         }
     }
+	
+	//-------------------------------------------------------------------------- Action on user
+	void CleanPlayer(string playerId)
+   	{
+		string ownerId = playerGroup.Get(playerId);
 
-	// Send information of new player to all players already in group, and group members to the new player
-	void UpdateGroup(string joinerId, string groupOwnerId)
-	{
-		ref array<string> groupArray = groups.Get(groupOwnerId);
-		PlayerIdentity joinerIdentity = playerIdentities.Get(joinerId);
-		PlayerBase joinerPB = playerEntities.Get(joinerId);
-
-		Print("[PartyMe][Event] UpdateGroup | " + groupArray + " | " + joinerIdentity + " | " + joinerPB);
-		if (groupArray && joinerIdentity && joinerPB)
+		playerGroup.Remove(playerId);
+		playerEntities.Remove(playerId);
+		playerIdentities.Remove(playerId);
+		if (playerId == ownerId)
+			DestroyGroup(ownerId);
+		else
 		{
-			for (int iMember = 0; iMember < groupArray.Count(); iMember++)
-			{
-				if (groupArray[iMember] == joinerId) continue;
-				PlayerIdentity memberIdentity = playerIdentities.Get(groupArray[iMember]);
-				PlayerBase memberPB = playerEntities.Get(groupArray[iMember]);
+			ref array<string> group = groups.Get(ownerId);
 
-				Print("[PartyMe][GroupManager] Sending | " + joinerIdentity + " | " + joinerPB + " | " + memberIdentity + " | " + memberPB);
-				SendGroupMemberInfos(joinerIdentity, memberIdentity, memberPB);
-				SendGroupMemberInfos(memberIdentity, joinerIdentity, joinerPB);
-			}
+			if (group)
+				group.RemoveItem(playerId);
 		}
 	}
 	
+	//-------------------------------------------------------------------------- Group infos
+	array<string> GetAllGroups()
+    {
+        return groups.GetKeyArray();
+    }
+
+	ref array<string> GetGroupMembers(string ownerId)
+    {
+        return groups.Get(ownerId);
+    }
+
+	int GetGroupSize(string leaderId)
+	{
+		ref array<string> group = groups.Get(leaderId);
+		
+		if (group)
+			return group.Count();
+		return 0;
+	}
+
+	ref array<string> GetGroupMembersFromMember(string playerId)
+    {
+        return GetGroupMembers(GetPlayerGroupId(playerId));
+    }
+
+	//-------------------------------------------------------------------------- Action to group
 	void SendGroupMemberInfos(PlayerIdentity toSendIdentity, PlayerIdentity memberIdentity, PlayerBase memberPB)
 	{
 		if (!toSendIdentity || !memberIdentity || !memberPB) return;
@@ -128,106 +137,93 @@ class PM_Group_Manager
 		auto params = new Param4<string, string, vector, float>(memberId, memberName, memberPos, memberHealth);
 		GetRPCManager().SendRPC("PartyMe", "PlayerJoinGroup", params, false, toSendIdentity);
 	}
+	
+	//-------------------------------------------------------------------------- Action on group
+	void KickFromGroup(string playerIdAskingKick, string playerIdToKick)
+	{
+		if (!IsLeader(playerIdAskingKick) || playerGroup.Get(playerIdToKick) != playerIdAskingKick)
+			return;
+		LeaveGroup(playerIdToKick);
+	}
+	
+	void LeaveGroup(string playerId)
+	{
+		string ownerId = playerGroup.Get(playerId);
+		
+		if (playerId == ownerId)
+			DestroyGroup(ownerId);
+		else
+			RemovePlayerFromGroup(playerId);
+	}
+	
+	void DestroyGroup(string ownerId)
+	{
+		ref array<string> group = groups.Get(ownerId);
 
-    // Remove a player from a group
-    void RemovePlayerGroup(string playerId)
+		if (!group)
+			return;
+		for (int iMember = 0; iMember < group.Count(); iMember++)
+			RemovePlayerFromGroup(group[iMember]);
+		groups.Remove(ownerId);
+	}
+
+	void RemovePlayerFromGroup(string playerId)
     {
         ref array<string> group = GetGroupMembersFromMember(playerId);
+		auto params = new Param1<string>(playerId);
+		PlayerIdentity memberIdentity;
 
-        if (group)
-        {
-            int indexInGroup = group.Find(playerId);
-
-            if (indexInGroup != -1)
-            {
-                group.Remove(indexInGroup);
-                // Send RPC to players in same party
-
-            }
-            playerGroup.Set(playerId, string.Empty);
-        }
-    }
-
-    // Get group assigned to a player
-    string GetPlayerGroupId(string playerId)
-    {
-        return playerGroup.Get(playerId);
-    }
-
-    /*****
-     *  Player entity
-    *****/
-    void SetPlayerEntity(string playerId, PlayerBase playerEntity)
-    {
-        playerEntities.Set(playerId, playerEntity);
-    }
-
-    PlayerBase GetPlayerEntity(string playerId)
-    {
-        return playerEntities.Get(playerId);
-    }
-
-    /*****
-     *  Player identity
-    *****/ 
-    void SetPlayerIdentity(string playerId, PlayerIdentity identity)
-    {
-        playerIdentities.Set(playerId, identity);
-    }
-
-    PlayerIdentity GetPlayerIdentity(string playerId)
-    {
-        return playerIdentities.Get(playerId);
-    }
-
-    /*****
-     *  Player members in a group
-    *****/
-    ref array<string> GetGroupMembers(string groupId)
-    {
-        return groups.Get(groupId);
-    }
-
-    array<string> GetAllGroups()
-    {
-        return groups.GetKeyArray();
-    }
-
-    ref array<string> GetGroupMembersFromMember(string playerId)
-    {
-        return GetGroupMembers(GetPlayerGroupId(playerId));
-    }
-
-	bool IsLeader(string playerId)
-	{
-		string leaderId = playerGroup.Get(playerId);
-		
-		if (leaderId != string.Empty && leaderId != playerId)
+        if (!group)
+			return;
+		for (int iMember = 0; iMember < group.Count(); iMember++)
 		{
-			return false;
+			memberIdentity = playerIdentities.Get(group[iMember]);
+			if (memberIdentity)
+				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveGroup", params, false, memberIdentity);
 		}
-		return true;
-	}
-	
-	int GetGroupSize(string leaderId)
+		group.RemoveItem(playerId);
+		playerGroup.Set(playerId, string.Empty);
+    }
+
+	//-------------------------------------------------------------------------- Action to members of a group
+	void SendInformationsOfJoiningMember(string joinerId, string ownerId)
 	{
-		ref array<string> group = groups.Get(leaderId);
-		
-		if (group)
+		ref array<string> groupArray = groups.Get(ownerId);
+		PlayerIdentity joinerIdentity = playerIdentities.Get(joinerId);
+		PlayerBase joinerPB = playerEntities.Get(joinerId);
+
+		if (groupArray && joinerIdentity && joinerPB)
 		{
-			return group.Count();
+			for (int iMember = 0; iMember < groupArray.Count(); iMember++)
+			{
+				if (groupArray[iMember] == joinerId)
+					continue;
+				PlayerIdentity memberIdentity = playerIdentities.Get(groupArray[iMember]);
+				PlayerBase memberPB = playerEntities.Get(groupArray[iMember]);
+
+				SendGroupMemberInfos(joinerIdentity, memberIdentity, memberPB);
+				SendGroupMemberInfos(memberIdentity, joinerIdentity, joinerPB);
+			}
 		}
-		return 0;
 	}
-	
+
 	//-------------------------------------------------------------------------- Events
 	void OnPlayerJoinGroup(ref PM_Event_Params eventParams)
 	{
 		string ownerId = eventParams.playerIdTo;
 		string joiningId = eventParams.playerIdFrom;
 
-		Print("[PartyMe][Event] OnPlayerJoinGroup has been called!");
 		SetPlayerGroup(joiningId, ownerId);
+	}
+	
+	void OnPlayerKick(ref PM_Event_Params eventParams)
+	{
+		KickFromGroup(eventParams.playerIdFrom, eventParams.playerIdTo);
+	}
+
+	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
+	{
+		CleanPlayer(eventParams.playerIdFrom);
 	}
 };
 

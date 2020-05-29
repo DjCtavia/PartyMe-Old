@@ -17,6 +17,7 @@ class PM_Group
     {
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
         PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
+		PM_GetEvents().AddEvent("UpdatePlayerPosition", this);
     }
 
     // Return if player is in group
@@ -106,9 +107,7 @@ class PM_Group
         {
             playerInfos = players.Get(id);
             if (playerInfos)
-            {
                 playerInfos.position = position;
-            }
         }
     }
 
@@ -146,6 +145,11 @@ class PM_Group
     void OnPlayerLeaveGroup(PM_Event_Params eventParams)
     {
         RemovePlayer(eventParams.playerIdFrom);
+    }
+	
+	void OnUpdatePlayerPosition(PM_Event_Params eventParams)
+    {
+		UpdatePlayerPosition(eventParams.playerIdFrom, eventParams.position);
     }
 };
 
