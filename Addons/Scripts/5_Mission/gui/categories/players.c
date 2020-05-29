@@ -234,9 +234,9 @@ class PM_UI_party_PlayerWidget
         if (button == MouseState.LEFT)
         {
             if (w == m_btn_leadOptions)
-            {
-
-            }
+				Print("[PartyMe][Players] C'est temporaire!");
+			if (w == m_btn_SHMarker)
+				ToggleMarker();
         }
        return false;
     }
@@ -245,6 +245,15 @@ class PM_UI_party_PlayerWidget
     {
 
     }
+	
+	void ToggleMarker()
+	{
+		ref PM_Player_Infos_t pInfos = PM_GetGroup().players.Get(m_playerId);
+		
+		if (!pInfos)
+			return;
+		pInfos.w_marker.SetVisible(!pInfos.w_marker.IsVisible());
+	}
 };
 
 class PM_UI_LeadOptions
