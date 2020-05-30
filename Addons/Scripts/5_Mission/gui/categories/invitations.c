@@ -51,28 +51,21 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 		ref PM_C_Invitations invitations = MissionGameplay.Cast(GetGame().GetMission()).m_pm_invitations;
 		string playerId;
 
-		Print("[PartyMe][UI][InviteList] Starting to init invitations: " + invitations);
 		if (invitations && PM_GetPlayerId(playerId))
 		{
 			ref array<string> playersInvitations = invitations.m_invitations.Get(playerId);
 
-			Print("[PartyMe][UI][InviteList] Getting invitations: " + playersInvitations);
 			if (playersInvitations)
 			{
-				Print("[PartyMe][UI][InviteList] Number of invitations found: " + playersInvitations.Count());
 				for (int iPlayer = 0; iPlayer < playersInvitations.Count(); iPlayer++)
 				{
 					string pId = playersInvitations.Get(iPlayer);
 					string pName;
 					
 					if (PM_GetPlayerUtilities().GetPlayerName(pId, pName))
-					{
 						AddPlayer(pId, pName);
-					}
 					else
-					{
 						AddPlayer(pId, "Unknown name");
-					}
 				}
 			}
 		}
@@ -89,7 +82,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
     }
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- Utils
     int FindPlayer(string playerId)
     {
         for (int index = 0; index < m_players.Count(); index++)
@@ -136,7 +129,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 		}
     }
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- Widget Positioning
     void UpdateWidgetsPosition()
     {
 		for (int indexWidget = 0; indexWidget < m_players.Count(); indexWidget++)
@@ -194,8 +187,6 @@ class PM_UI_invitations_PlayerWidget
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, parent);
         GetWidgets();
         ConfigWidgets();
-        // Verify if can invite
-        // Maybe add event for invitations ?
     }
 	
 	void ~PM_UI_invitations_PlayerWidget()
@@ -230,7 +221,7 @@ class PM_UI_invitations_PlayerWidget
         m_w_root.SetPos(50, (40 + 65 * index));
     }
 
-    //--------------------------------------------------------------------------
+    //-------------------------------------------------------------------------- Getters
     string GetPlayerId()
     {
         return m_playerId;
@@ -246,7 +237,6 @@ class PM_UI_invitations_PlayerWidget
     {
 		if (button == MouseState.LEFT)
 		{
-			Print("[PartyMe][UI]PlayerInvite widget click");
 			if (w == m_btn_accept)
 			{
 				InvitationResponse(true);
