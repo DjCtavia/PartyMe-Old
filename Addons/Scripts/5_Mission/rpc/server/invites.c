@@ -19,6 +19,7 @@ class PM_RPC_S_invites
 
         ref PM_Event_Params eventParams = new PM_Event_Params;
         eventParams.playerIdFrom = sender.GetId();
+		eventParams.playerIdFromIdentity = sender;
 		eventParams.name = data.param2;
 		eventParams.playerIdTo = data.param1;
 		Print("[PartyMe][RPC] InvitationReceived");
@@ -40,6 +41,7 @@ class PM_RPC_S_invites
 		ref PM_Event_Params eventParams = new PM_Event_Params;
 
 		eventParams.playerIdFrom = sender.GetId();
+		eventParams.playerIdFromIdentity = sender;
 		eventParams.answer = data.param2;
 		eventParams.playerIdTo = data.param1;
 		PM_GetEvents().CallEvent("InvitationResponse", eventParams);

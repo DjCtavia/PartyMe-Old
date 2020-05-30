@@ -118,11 +118,22 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
     {
         int indexPlayer = FindPlayer(playerId);
 
-        if (indexPlayer != -1)
+        if (indexPlayer > -1)
         {
             m_players.Remove(indexPlayer);
             UpdateWidgetsPosition();
         }
+    }
+	
+	void RemovePlayerByWidgetReference(ref PM_UI_invitations_PlayerWidget widget)
+    {
+		int remove_index = m_players.Find(widget);
+
+		if (remove_index > -1)
+		{
+			m_players.RemoveOrdered(remove_index);
+			UpdateWidgetsPosition();
+		}
     }
 
     //--------------------------------------------------------------------------
@@ -152,6 +163,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 			
 			if (widget && widget.OnClick(w, x, y, button))
 			{
+				RemovePlayerByWidgetReference(widget);
 				return true;
 			}
 		}
@@ -185,6 +197,12 @@ class PM_UI_invitations_PlayerWidget
         // Verify if can invite
         // Maybe add event for invitations ?
     }
+	
+	void ~PM_UI_invitations_PlayerWidget()
+	{
+		if (m_w_root)
+			m_w_root.Unlink();
+	}
 
     private void GetWidgets()
     {
@@ -226,20 +244,6 @@ class PM_UI_invitations_PlayerWidget
 	//-------------------------------------------------------------------------- UI Events
 	bool OnClick(Widget w, int x, int y, int button)
     {
-		/*
-        if (button == MouseState.LEFT && !PM_GetGroup().IsInGroup())
-        {
-			switch (w)
-			{
-				case m_btn_accept:
-					InvitationResponse(true);
-					return true;
-				case m_btn_decline:
-					InvitationResponse(false);
-					return true;
-			}
-        }
-		*/
 		if (button == MouseState.LEFT)
 		{
 			Print("[PartyMe][UI]PlayerInvite widget click");
@@ -260,9 +264,13 @@ class PM_UI_invitations_PlayerWidget
 	//-------------------------------------------------------------------------- UI Events Functions
 	void InvitationResponse(bool response)
 	{
+		MissionGameplay mission = MissionGameplay.Cast(GetGame().GetMission());
 		auto params = new Param2<string, bool>(m_playerId, response);
+		string playerId;
 
 		Print("[PartyMe][UI]PlayerInvite widget sending RPC");
 		GetRPCManager().SendRPC("PartyMe", "InvitationResponse", params);
+		if (mission && PM_GetPlayerId(playerId))
+			mission.m_pm_invitations.RemovePlayerInvite(m_playerId, playerId);
 	}
 };

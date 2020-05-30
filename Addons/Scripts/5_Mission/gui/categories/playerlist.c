@@ -249,8 +249,6 @@ class PM_UI_playerlist_PlayerWidget
         EnableInviteButton(false);
         GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(EnableInviteButton, INVITE_DELAY, false, true);
 		if (PM_GetPlayerName(playerName))
-		{
 			GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(m_playerId, playerName));
-		}
     }
 };

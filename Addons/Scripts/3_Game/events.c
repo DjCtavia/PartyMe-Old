@@ -16,6 +16,8 @@ class PM_Event_Params
 {
     string playerIdFrom;
     string playerIdTo;
+	PlayerIdentity playerIdFromIdentity;
+	PlayerIdentity playerIdToIdentity;
     bool answer;
     string name;
     vector position;
