@@ -27,7 +27,7 @@ FrameWidgetClass rootFrame {
      style rover_sim_colorable
      {
       ScrollWidgetClass ScrollMenu {
-       ignorepointer 1
+       ignorepointer 0
        position 0 0
        size 250 600
        hexactpos 1

@@ -7,7 +7,7 @@ FrameWidgetClass rootFrame {
  vexactsize 1
  {
   ScrollWidgetClass playerList {
-   ignorepointer 1
+   ignorepointer 0
    position 0 0
    size 700 600
    hexactpos 1

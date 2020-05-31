@@ -22,8 +22,6 @@ modded class MissionGameplay
         PM_GetGroup();
         PM_GetGroupPositionUpdater();
         PM_GetMarkerUpdater();
-
-        // PM_GetGroup().AddPlayer("FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs=", "Bobby", "0 0 0", 100);
     }
 
     //--------------------------------------------------------------------------
