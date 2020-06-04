@@ -145,7 +145,12 @@ class PM_Group
 
     void OnPlayerLeaveGroup(PM_Event_Params eventParams)
     {
-        RemovePlayer(eventParams.playerIdFrom);
+        PlayerIdentity playerId = GetGame().GetPlayer().GetIdentity();
+
+        if (playerId && eventParams.playerIdFrom == playerId.GetId())
+            LeaveGroup();
+        else
+            RemovePlayer(eventParams.playerIdFrom);
     }
 
     void OnGroupDestroyed(PM_Event_Params eventParams)

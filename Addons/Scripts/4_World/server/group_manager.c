@@ -60,7 +60,7 @@ class PM_Group_Manager
 	
 	void SetPlayerGroup(string joinerId, string ownerId)
     {
-        if (!playerGroup.Contains(joinerId) || playerGroup.Get(joinerId) == string.Empty || ownerId == string.Empty)
+        /*if (!playerGroup.Contains(joinerId) || playerGroup.Get(joinerId) == string.Empty || ownerId == string.Empty)
         {
             ref array<string> groupArray;
 
@@ -78,8 +78,27 @@ class PM_Group_Manager
 				playerGroup.Set(joinerId, ownerId);
 				SendInformationsOfJoiningMember(joinerId, ownerId);
             }
-            Print("[PM] Player " + joinerId + " joined " + ownerId + " group.");
-        }
+        }*/
+		string groupOfOwnerId = playerGroup.Get(ownerId);
+		ref array<string> groupArray = groups.Get(ownerId);
+
+		if (!groupOfOwnerId || groupOfOwnerId == string.Empty || groupOfOwnerId == ownerId)
+		{
+			playerGroup.Set(ownerId, ownerId);
+			if (!groupArray)
+			{
+				groupArray = new array<string>;
+				groupArray.Insert(ownerId);
+				groups.Set(ownerId, groupArray);
+			}
+			if (groupArray.Find(joinerId) == -1)
+			{
+				playerGroup.Set(joinerId, ownerId);
+				groupArray.Insert(joinerId);
+				SendInformationsOfJoiningMember(joinerId, ownerId);
+			}
+			Print("[PM] Player " + joinerId + " joined " + ownerId + " group.");
+		}
     }
 	
 	//-------------------------------------------------------------------------- Action on user
@@ -148,46 +167,52 @@ class PM_Group_Manager
 			DestroyGroup(ownerId);
 		else
 			RemovePlayerFromGroup(playerId);
-		playerGroup.Set(playerId, string.Empty);
 	}
 
 	void DestroyGroup(string ownerId)
 	{
 		ref array<string> group = groups.Get(ownerId);
-		PlayerIdentity memberIdentity;
 
 		if (!group)
 			return;
 		for (int iMember = 0; iMember < group.Count(); iMember++)
 		{
-			RemovePlayerFromGroup(group[iMember]);
-			memberIdentity = playerIdentities.Get(group[iMember]);
+			PlayerIdentity memberIdentity = playerIdentities.Get(group[iMember]);
+
+			playerGroup.Set(group[iMember], string.Empty);
 			if (memberIdentity)
 				GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
 		}
 		groups.Remove(ownerId);
-		Print("[PartyMe] Group of " + ownerId + " has been destroyed");
 	}
 
 	void RemovePlayerFromGroup(string playerId)
     {
-        ref array<string> group = GetGroupMembersFromMember(playerId);
-		auto params = new Param1<string>(playerId);
-		PlayerIdentity memberIdentity;
+		string ownerId = playerGroup.Get(playerId);
+        ref array<string> group = groups.Get(ownerId);
 
         if (!group)
 			return;
 		for (int iMember = 0; iMember < group.Count(); iMember++)
 		{
-			memberIdentity = playerIdentities.Get(group[iMember]);
+			PlayerIdentity memberIdentity = playerIdentities.Get(group[iMember]);
+
 			if (memberIdentity)
-				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveGroup", params, false, memberIdentity);
+			{
+				if (memberIdentity.GetId() != playerId)
+				{
+					GetRPCManager().SendRPC("PartyMe", "PlayerLeaveGroup", new Param1<string>(playerId), false, memberIdentity);
+				}
+				else
+				{
+					playerGroup.Set(group[iMember], string.Empty);
+					group.RemoveItem(group[iMember]);
+					GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
+				}
+			}
 		}
-		group.RemoveItem(playerId);
-		playerGroup.Set(playerId, string.Empty);
-		Print("[PartyMe] GroupSize: " + group.Count());
 		if (group.Count() == 1)
-			DestroyGroup(playerId);
+			DestroyGroup(ownerId);
     }
 
 	//-------------------------------------------------------------------------- Action to members of a group
