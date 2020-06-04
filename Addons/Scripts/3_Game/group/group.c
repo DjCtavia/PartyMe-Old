@@ -17,6 +17,7 @@ class PM_Group
     {
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
         PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
+        PM_GetEvents().AddEvent("GroupDestroyed", this);
 		PM_GetEvents().AddEvent("UpdatePlayerPosition", this);
     }
 
@@ -124,10 +125,10 @@ class PM_Group
 
     void LeaveGroup()
     {
-        if (players)
-        {
-            players.Clear();
-        }
+        if (!IsInGroup())
+            return;
+        isLeader = true;
+        players.Clear();
     }
 	
 	//-------------------------------------------------------------------------- Getters
@@ -145,6 +146,11 @@ class PM_Group
     void OnPlayerLeaveGroup(PM_Event_Params eventParams)
     {
         RemovePlayer(eventParams.playerIdFrom);
+    }
+
+    void OnGroupDestroyed(PM_Event_Params eventParams)
+    {
+        LeaveGroup();
     }
 	
 	void OnUpdatePlayerPosition(PM_Event_Params eventParams)

@@ -75,6 +75,7 @@ class PM_Group_Manager
             if (groupArray.Find(joinerId) == -1)
             {
                 groupArray.Insert(joinerId);
+				playerGroup.Set(joinerId, ownerId);
 				SendInformationsOfJoiningMember(joinerId, ownerId);
             }
             Print("[PM] Player " + joinerId + " joined " + ownerId + " group.");
@@ -139,32 +140,33 @@ class PM_Group_Manager
 	}
 	
 	//-------------------------------------------------------------------------- Action on group
-	void KickFromGroup(string playerIdAskingKick, string playerIdToKick)
-	{
-		if (!IsLeader(playerIdAskingKick) || playerGroup.Get(playerIdToKick) != playerIdAskingKick)
-			return;
-		LeaveGroup(playerIdToKick);
-	}
-	
 	void LeaveGroup(string playerId)
 	{
 		string ownerId = playerGroup.Get(playerId);
-		
+
 		if (playerId == ownerId)
 			DestroyGroup(ownerId);
 		else
 			RemovePlayerFromGroup(playerId);
+		playerGroup.Set(playerId, string.Empty);
 	}
-	
+
 	void DestroyGroup(string ownerId)
 	{
 		ref array<string> group = groups.Get(ownerId);
+		PlayerIdentity memberIdentity;
 
 		if (!group)
 			return;
 		for (int iMember = 0; iMember < group.Count(); iMember++)
+		{
 			RemovePlayerFromGroup(group[iMember]);
+			memberIdentity = playerIdentities.Get(group[iMember]);
+			if (memberIdentity)
+				GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
+		}
 		groups.Remove(ownerId);
+		Print("[PartyMe] Group of " + ownerId + " has been destroyed");
 	}
 
 	void RemovePlayerFromGroup(string playerId)
@@ -183,6 +185,9 @@ class PM_Group_Manager
 		}
 		group.RemoveItem(playerId);
 		playerGroup.Set(playerId, string.Empty);
+		Print("[PartyMe] GroupSize: " + group.Count());
+		if (group.Count() == 1)
+			DestroyGroup(playerId);
     }
 
 	//-------------------------------------------------------------------------- Action to members of a group
@@ -214,11 +219,6 @@ class PM_Group_Manager
 		string joiningId = eventParams.playerIdFrom;
 
 		SetPlayerGroup(joiningId, ownerId);
-	}
-	
-	void OnPlayerKick(ref PM_Event_Params eventParams)
-	{
-		KickFromGroup(eventParams.playerIdFrom, eventParams.playerIdTo);
 	}
 
 	void OnPlayerDisconnect(ref PM_Event_Params eventParams)

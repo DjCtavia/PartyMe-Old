@@ -86,11 +86,8 @@ class PM_Group_Position_Updater
         ref PM_Group group = PM_GetGroup();
         ref PM_Player_Infos_t pInfos = group.players.Get(data.param1);
 
-        Print("[PM] UpdatePlayerPositionNetwork: " + data.param1);
         if (pInfos)
-        {
             pInfos.position = data.param2;
-        }
     }
 
     /*

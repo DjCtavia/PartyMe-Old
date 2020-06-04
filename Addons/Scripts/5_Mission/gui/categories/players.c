@@ -46,6 +46,8 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         Init();
 		InitPlayersGroup();
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
+		PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
+		PM_GetEvents().AddEvent("GroupDestroyed", this);
     }
 
 	/*
@@ -130,13 +132,20 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         AddPlayer(eventParams.playerIdFrom, eventParams.name);
     }
 
+    void OnPlayerLeaveGroup(PM_Event_Params eventParams)
+    {
+        RemovePlayer(eventParams.playerIdFrom);
+    }
+
+	void OnGroupDestroyed(PM_Event_Params eventParams)
+	{
+		m_players.Clear();
+	}
+
 	//-------------------------------------------------------------------------- UI Events
 	override bool OnClick(Widget w, int x, int y, int button)
 	{
-		if (w == m_btn_leaveParty)
-		{
-			return true;
-		}
+		if (LeaveGroup(w)) return true;
 		for (int iWidget = 0; iWidget < m_players.Count(); iWidget++)
 		{
 			ref PM_UI_party_PlayerWidget widget = m_players.Get(iWidget);
@@ -148,6 +157,17 @@ class PM_UI_Menu_Party extends PM_UI_Menu
 		}
 		return false;
 	}
+
+    //-------------------------------------------------------------------------- UI Events Actions
+    bool LeaveGroup(Widget w)
+    {
+        if (w != m_btn_leaveParty)
+            return false;
+        PM_GetGroup().LeaveGroup();
+        m_players.Clear();
+        GetRPCManager().SendRPC("PartyMe", "PlayerLeaveGroup");
+        return true;
+    }
 };
 
 class PM_UI_party_PlayerWidget
@@ -233,26 +253,33 @@ class PM_UI_party_PlayerWidget
     {
         if (button == MouseState.LEFT)
         {
-            if (w == m_btn_leadOptions)
-				Print("[PartyMe][Players] C'est temporaire!");
-			if (w == m_btn_SHMarker)
-				ToggleMarker();
+			if (OpenLeadOptions(w)) return true;
+			if (ToggleMarker(w)) return true;
         }
        return false;
     }
     //-------------------------------------------------------------------------- UI Events Functions
-    void OpenLeadOptions()
+    bool OpenLeadOptions(Widget w)
     {
-
+		if (w != m_btn_leadOptions)
+			return false;
+		auto params = new Param2<string, string>(PM_GetPlayerId(), m_playerId);
+		// Kick for the moment, need to edit later
+		GetRPCManager().SendRPC("PartyMe", "PlayerKickGroup", params);
+        Print("[PartyMe] Trying to kick: " + m_playerId);
+		return true;
     }
-	
-	void ToggleMarker()
+
+	bool ToggleMarker(Widget w)
 	{
+		if (w != m_btn_SHMarker)
+			return false;
 		ref PM_Player_Infos_t pInfos = PM_GetGroup().players.Get(m_playerId);
 		
 		if (!pInfos)
-			return;
+			return true;
 		pInfos.w_marker.SetVisible(!pInfos.w_marker.IsVisible());
+		return true;
 	}
 };
 

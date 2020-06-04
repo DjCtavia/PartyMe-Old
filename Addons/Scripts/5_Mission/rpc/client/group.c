@@ -2,7 +2,15 @@ class PM_RPC_C_group
 {
 	void PM_RPC_C_group()
 	{
+		GetRPCManager().AddRPC("PartyMe", "SetMember", this, SingleplayerExecutionType.Both);
 		GetRPCManager().AddRPC("PartyMe", "PlayerJoinGroup", this, SingleplayerExecutionType.Both);
+		GetRPCManager().AddRPC("PartyMe", "PlayerLeaveGroup", this, SingleplayerExecutionType.Both);
+		GetRPCManager().AddRPC("PartyMe", "GroupDestroyed", this, SingleplayerExecutionType.Both);
+	}
+
+	void SetMember(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+	{
+		PM_GetGroup().isLeader = false;
 	}
 
 	/*
@@ -33,4 +41,19 @@ class PM_RPC_C_group
 		Print("[PartyMe][RPC] PlayerJoinGroup | " + eventParams.playerIdFrom + " | " + eventParams.name + " | " + eventParams.position + " | " + eventParams.health);
 		PM_GetEvents().CallEvent("PlayerJoinGroup", eventParams);
     }
+
+	void PlayerLeaveGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+	{
+		Param1<string> data;
+		if (!ctx.Read(data)) return;
+		ref PM_Event_Params eventParams = new PM_Event_Params;
+		eventParams.playerIdFrom = data.param1;
+
+		PM_GetEvents().CallEvent("PlayerLeaveGroup", eventParams);
+	}
+
+	void GroupDestroyed(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+	{
+		PM_GetEvents().CallEvent("GroupDestroyed", NULL);
+	}
 };
