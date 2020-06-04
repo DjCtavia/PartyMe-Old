@@ -1,6 +1,5 @@
 modded class PlayerBase
 {
-
     override void EEKilled( Object killer )
     {
         super.EEKilled(killer);
@@ -33,4 +32,4 @@ modded class PlayerBase
             }
         }
     }
-}
+};

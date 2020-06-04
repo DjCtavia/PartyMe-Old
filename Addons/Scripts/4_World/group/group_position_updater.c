@@ -102,7 +102,7 @@ class PM_Group_Position_Updater
     */
     void IsLocalPlayerMissing(ref PM_Group group)
     {
-        string playerId = "";
+        string playerId;
         if (!group || !PM_GetPlayerId(playerId) || !group.players) return;
 
         foreach (ref PM_Player_Infos_t pInfos : group.players.GetValueArray())
@@ -126,13 +126,15 @@ class PM_Group_Position_Updater
         Param1<string> data;
         if (!ctx.Read(data)) return;
 
+        string playerId;
         ref PM_Group group = PM_GetGroup();
         ref PM_Player_Infos_t pInfos = group.players.Get(data.param1);
 
-        if (pInfos)
+        if (pInfos && PM_GetPlayerId(playerId))
         {
             pInfos.localPlayer = null;
             pInfos.isLocal = false;
+            GetRPCManager().SendRPC("PartyMe", "AskPlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
         }
         Print("[PM] Player died, localPlayer variable has been reset to NULL. Dead player id: " + data.param1);
     }
