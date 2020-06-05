@@ -9,7 +9,11 @@ class PM_RPC_S_group
 	void PlayerLeaveGroup(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
 	{
 		Print("[PartyMe] Player " + sender.GetName() + " is leaving group.");
-		PM_GetGroupManager().LeaveGroup(sender.GetId());
+		ref PM_Event_Params eventParams = new PM_Event_Params;
+
+		eventParams.playerIdFrom = sender.GetId();
+		eventParams.playerIdFromIdentity = sender;
+		PM_GetEvents().CallEvent("PlayerLeaveGroup", eventParams);
 	}
 
 	/*

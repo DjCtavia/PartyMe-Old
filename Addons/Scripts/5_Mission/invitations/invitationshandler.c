@@ -57,11 +57,12 @@ class PM_InvitationsHandler
 	
 	void CleanInvitationFromId(string sender)
 	{
-		array<array<string>> receivers = m_invitations.GetValueArray();
-		
-		for (int iReceiver = 0; iReceiver < receivers.Count(); iReceiver++)
-			if (receivers[iReceiver])
-				receivers[iReceiver].RemoveItem(sender);
+		for (int iReceiver = 0; iReceiver < m_invitations.Count(); iReceiver++)
+		{
+			ref array<string> invitations = m_invitations.GetElement(iReceiver);
+			if (invitations)
+				invitations.RemoveItem(sender);
+		}
 	}
 
 	//-------------------------------------------------------------------------- Events

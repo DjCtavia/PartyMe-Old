@@ -57,8 +57,8 @@ class PM_Group
     // Add new player to group
     bool AddPlayer(string id, string name, vector position, float health)
     {
-        Print("[PartyMe][AddPlayer] " + players.ToString());
-        if (players && !players.Contains(id))
+        Print("[PartyMe][group] AddPlayer: " + players.ToString());
+        if (!players.Contains(id))
         {
             ref PM_Player_Infos_t member = new PM_Player_Infos_t();
             member.name = name;
@@ -72,6 +72,12 @@ class PM_Group
             return true;
         }
         return false;
+    }
+
+    // Remove player from group
+    void RemovePlayer(string id)
+    {
+        players.Remove(id);
     }
 
     // Update health and position of group member
@@ -118,21 +124,8 @@ class PM_Group
         }
     }
 
-    // Remove player from group
-    bool RemovePlayer(string id)
-    {
-        if (players && players.Contains(id))
-        {
-            players.Remove(id);
-            return true;
-        }
-        return false;
-    }
-
     void LeaveGroup()
     {
-        if (!IsInGroup())
-            return;
         isLeader = true;
         players.Clear();
     }
@@ -146,6 +139,7 @@ class PM_Group
     //-------------------------------------------------------------------------- Events
     void OnPlayerJoinGroup(PM_Event_Params eventParams)
     {
+        Print("[PartyMe][Group] OnPlayerJoinGroup | " + eventParams.playerIdFrom + " | " + eventParams.name + " | " + eventParams.position + " | " + eventParams.health);
         AddPlayer(eventParams.playerIdFrom, eventParams.name, eventParams.position, eventParams.health);
     }
 

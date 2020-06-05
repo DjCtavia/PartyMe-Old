@@ -17,6 +17,7 @@ class PM_Group_Manager
 	void AddEvents()
 	{
 		PM_GetEvents().AddEvent("PlayerJoinGroup", this);
+		PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
 		PM_GetEvents().AddEvent("PlayerDisconnect", this);
 	}
 
@@ -194,9 +195,7 @@ class PM_Group_Manager
 
 			playerGroup.Remove(group[0]);
 			if (memberIdentity)
-			{
 				GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
-			}
 			group.Remove(0);
 		}
 		groups.Remove(ownerId);
@@ -261,6 +260,11 @@ class PM_Group_Manager
 
 		Print("[PM][group_manager][OnPlayerJoinGroup] joinerId: " + joiningId + " | ownerId: " + ownerId);
 		SetPlayerGroup(joiningId, ownerId);
+	}
+
+	void OnPlayerLeaveGroup(ref PM_Event_Params eventParams)
+	{
+		LeaveGroup(eventParams.playerIdFrom);
 	}
 
 	void OnPlayerDisconnect(ref PM_Event_Params eventParams)

@@ -132,11 +132,15 @@ class PM_Server_Group_Position_Updater
 	//-------------------------------------------------------------------------- Events
 	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
 	{
-		array<string> players = playerAskingPositionIds.GetKeyArray();
-		ref array<string> askers;
-		
-		foreach (string player : players)
-			RemovePositionUpdate(eventParams.playerIdFrom, player);
+		for (int askingIndex = 0; askingIndex < playerAskingPositionIds.Count(); askingIndex++)
+		{
+			ref array<string> players = playerAskingPositionIds.GetElement(askingIndex);
+
+			if (players)
+			{
+				players.RemoveItem(eventParams.playerIdFrom);
+			}
+		}
 		playerAskingPositionIds.Remove(eventParams.playerIdFrom);
 	}
 };

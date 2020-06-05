@@ -78,11 +78,6 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         m_btn_leaveParty = ButtonWidget.Cast(m_w_root.FindAnyWidget("leaveParty"));
     }
 
-    void SetWidgetPlayerPosition(int index)
-    {
-
-    }
-
     int FindPlayer(string playerId)
     {
         for (int index = 0; index < m_players.Count(); index++)
@@ -225,16 +220,7 @@ class PM_UI_party_PlayerWidget
     //--------------------------------------------------------------------------
     void RetrievePlayerInfos()
     {
-        string playerName;
-
-        if (PM_GetPlayerUtilities().GetPlayerName(m_playerId, playerName))
-        {
-            m_txt_playerName.SetText(playerName);
-        }
-        else
-        {
-            m_txt_playerName.SetText("Unknow name");
-        }
+        m_txt_playerName.SetText(m_playerName);
     }
 
     //-------------------------------------------------------------------------- Getters

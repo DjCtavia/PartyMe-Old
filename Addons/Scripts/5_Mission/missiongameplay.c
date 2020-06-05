@@ -15,7 +15,11 @@ modded class MissionGameplay
 
     void ~MissionGameplay()
     {
-        PM_GetGroup().Clear();
+        g_PM_group_constraint = null;
+        g_PM_group = null;
+        g_PM_events = null;
+        g_PM_group_position_updater = null;
+        g_PM_marker_updater = null;
     }
 
     void InitPartyMe()
