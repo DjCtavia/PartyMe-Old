@@ -48,6 +48,12 @@ class PM_Group
         return isLeader;
     }
 
+    void Clear()
+    {
+        isLeader = true;
+        players.Clear();
+    }
+
     // Add new player to group
     bool AddPlayer(string id, string name, vector position, float health)
     {

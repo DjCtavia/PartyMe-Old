@@ -44,8 +44,49 @@ class PM_Group_Manager
 
 	PlayerIdentity GetPlayerIdentity(string playerId)
     {
-        return playerIdentities.Get(playerId);
+        /* Previous version
+		return playerIdentities.Get(playerId);
+		*/
+		array<Man> players = new array<Man>;
+		GetGame().GetWorld().GetPlayerList(players);
+
+		for (int iPlayer = 0; iPlayer < players.Count(); iPlayer++)
+		{
+			PlayerIdentity playerIdentity = players[iPlayer].GetIdentity();
+
+			if (!playerIdentity) continue;
+			if (playerIdentity.GetId() == playerId)
+				return playerIdentity;
+		}
+		return null;
     }
+
+	ref map<string, PlayerIdentity> GetGroupIdentities(string ownerId)
+	{
+		array<string> members = new array<string>;
+		ref map<string, PlayerIdentity> groupIdentities = new map<string, PlayerIdentity>;
+		array<Man> players = new array<Man>;
+		GetGame().GetWorld().GetPlayerList(players);
+
+		if (!groups.Get(ownerId))
+			return null;
+		members.Copy(groups.Get(ownerId));
+		for (int iPlayer = 0; iPlayer < players.Count(); iPlayer++)
+		{
+			PlayerIdentity playerIdentity = players[iPlayer].GetIdentity();
+			if (!playerIdentity) continue;
+			for (int iMember = 0; iMember < members.Count(); iMember++)
+			{
+				if (members[iMember] == playerIdentity.GetId())
+				{
+					groupIdentities.Set(members[iMember], playerIdentity);
+					members.Remove(iMember);
+					break;
+				}
+			}
+		}
+		return groupIdentities;
+	}
 
 	//-------------------------------------------------------------------------- Set user infos
 	void SetPlayerEntity(string playerId, PlayerBase playerEntity)
@@ -60,31 +101,13 @@ class PM_Group_Manager
 	
 	void SetPlayerGroup(string joinerId, string ownerId)
     {
-        /*if (!playerGroup.Contains(joinerId) || playerGroup.Get(joinerId) == string.Empty || ownerId == string.Empty)
-        {
-            ref array<string> groupArray;
-
-            if (!groups.Contains(ownerId))
-            {
-				groupArray = new array<string>;
-				groupArray.Insert(ownerId);
-                groups.Set(ownerId, groupArray);
-				playerGroup.Set(ownerId, ownerId);
-            }
-			groupArray = groups.Get(ownerId);
-            if (groupArray.Find(joinerId) == -1)
-            {
-                groupArray.Insert(joinerId);
-				playerGroup.Set(joinerId, ownerId);
-				SendInformationsOfJoiningMember(joinerId, ownerId);
-            }
-        }*/
 		string groupOfOwnerId = playerGroup.Get(ownerId);
 		ref array<string> groupArray = groups.Get(ownerId);
 
-		if (!groupOfOwnerId || groupOfOwnerId == string.Empty || groupOfOwnerId == ownerId)
-		{
+		if (!groupOfOwnerId || groupOfOwnerId == string.Empty)
 			playerGroup.Set(ownerId, ownerId);
+		if (!groupOfOwnerId || groupOfOwnerId == ownerId)
+		{
 			if (!groupArray)
 			{
 				groupArray = new array<string>;
@@ -97,27 +120,17 @@ class PM_Group_Manager
 				groupArray.Insert(joinerId);
 				SendInformationsOfJoiningMember(joinerId, ownerId);
 			}
-			Print("[PM] Player " + joinerId + " joined " + ownerId + " group.");
+			groupArray.Debug();
 		}
     }
-	
+
 	//-------------------------------------------------------------------------- Action on user
 	void CleanPlayer(string playerId)
    	{
-		string ownerId = playerGroup.Get(playerId);
-
+		LeaveGroup(playerId);
 		playerGroup.Remove(playerId);
 		playerEntities.Remove(playerId);
 		playerIdentities.Remove(playerId);
-		if (playerId == ownerId)
-			DestroyGroup(ownerId);
-		else
-		{
-			ref array<string> group = groups.Get(ownerId);
-
-			if (group)
-				group.RemoveItem(playerId);
-		}
 	}
 	
 	//-------------------------------------------------------------------------- Group infos
@@ -175,13 +188,16 @@ class PM_Group_Manager
 
 		if (!group)
 			return;
-		for (int iMember = 0; iMember < group.Count(); iMember++)
+		while (group.Count())
 		{
-			PlayerIdentity memberIdentity = playerIdentities.Get(group[iMember]);
+			PlayerIdentity memberIdentity = playerIdentities.Get(group[0]);
 
-			playerGroup.Set(group[iMember], string.Empty);
+			playerGroup.Remove(group[0]);
 			if (memberIdentity)
+			{
 				GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
+			}
+			group.Remove(0);
 		}
 		groups.Remove(ownerId);
 	}
@@ -205,7 +221,7 @@ class PM_Group_Manager
 				}
 				else
 				{
-					playerGroup.Set(group[iMember], string.Empty);
+					playerGroup.Remove(group[iMember]);
 					group.RemoveItem(group[iMember]);
 					GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, memberIdentity);
 				}
@@ -219,7 +235,7 @@ class PM_Group_Manager
 	void SendInformationsOfJoiningMember(string joinerId, string ownerId)
 	{
 		ref array<string> groupArray = groups.Get(ownerId);
-		PlayerIdentity joinerIdentity = playerIdentities.Get(joinerId);
+		PlayerIdentity joinerIdentity = GetPlayerIdentity(joinerId);
 		PlayerBase joinerPB = playerEntities.Get(joinerId);
 
 		if (groupArray && joinerIdentity && joinerPB)
@@ -228,7 +244,7 @@ class PM_Group_Manager
 			{
 				if (groupArray[iMember] == joinerId)
 					continue;
-				PlayerIdentity memberIdentity = playerIdentities.Get(groupArray[iMember]);
+				PlayerIdentity memberIdentity = GetPlayerIdentity(groupArray[iMember]);
 				PlayerBase memberPB = playerEntities.Get(groupArray[iMember]);
 
 				SendGroupMemberInfos(joinerIdentity, memberIdentity, memberPB);
@@ -243,6 +259,7 @@ class PM_Group_Manager
 		string ownerId = eventParams.playerIdTo;
 		string joiningId = eventParams.playerIdFrom;
 
+		Print("[PM][group_manager][OnPlayerJoinGroup] joinerId: " + joiningId + " | ownerId: " + ownerId);
 		SetPlayerGroup(joiningId, ownerId);
 	}
 

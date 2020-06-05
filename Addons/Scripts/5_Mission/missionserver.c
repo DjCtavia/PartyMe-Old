@@ -20,10 +20,9 @@ modded class MissionServer
     {
         super.InvokeOnConnect(player, identity);
 
-        PM_GetGroupManager().SetPlayerGroup(identity.GetId(), string.Empty);
-        // PM_GetGroupManager().SetPlayerGroup(identity.GetId(), "FBD0-BhNyNXQdFzx_FWJg_BZ3i62spPr_8LaiiITEJs="); // For tests
         PM_GetGroupManager().SetPlayerEntity(identity.GetId(), player);
         PM_GetGroupManager().SetPlayerIdentity(identity.GetId(), identity);
+		Print("[PartyMe] InvokeOnConnect | PlayerBase: " + player + " | identity: " + identity);
 
         // RPCs
         GetRPCManager().SendRPC("PartyMe", "PlayerJoinServer", new Param2<string, string>(identity.GetId(), identity.GetName()));
@@ -34,16 +33,18 @@ modded class MissionServer
 	{
         super.InvokeOnDisconnect(player);
 
+        Print("[PartyMe] Player Disconnecting");
         if (player)
         {
             PlayerIdentity identity = player.GetIdentity();
 
+            Print("[PartyMe] Disco player get identity");
             if (identity)
             {
 				ref PM_Event_Params eventParams = new PM_Event_Params;
         		eventParams.playerIdFrom = identity.GetId();
 
-				GetRPCManager().SendRPC("PartyMe", "PlayerLeaveServer", new Param1<string>(identity.GetId()));
+                Print("[PartyMe] Calling disconnect event");
 				PM_GetEvents().CallEvent("PlayerDisconnect", eventParams);
             }
         }

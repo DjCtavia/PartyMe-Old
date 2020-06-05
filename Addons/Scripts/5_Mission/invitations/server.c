@@ -49,8 +49,10 @@ class PM_S_Invitations extends PM_InvitationsHandler
 		bool hasAccepted = eventParams.answer;
 		PlayerIdentity newMemberIdentity = PM_GetGroupManager().GetPlayerIdentity(receiver);
 
+		Print("[PM][group_manager][OnPlayerJoinGroup] joinerId: " + eventParams.playerIdFrom + " | ownerId: " + eventParams.playerIdTo);
 		if (hasAccepted && HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
 		{
+			Print("[PartyMe] " + receiver + " join group of " + sender);
 			PM_GetEvents().CallEvent("PlayerJoinGroup", eventParams);
 			GetRPCManager().SendRPC("PartyMe", "SetMember", NULL, false, newMemberIdentity);
 		}

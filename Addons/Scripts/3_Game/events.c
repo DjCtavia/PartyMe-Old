@@ -54,7 +54,8 @@ class PM_events
         {
             events = m_events.Get(eventName);
         }
-        events.Insert(instToAdd);
+        if (events.Find(instToAdd) == -1)
+            events.Insert(instToAdd);
     }
 
     void RemoveEvent(string eventName, Class instToRemove)
@@ -85,6 +86,7 @@ class PM_events
     {
         ref array<Class> events = m_events.Get(eventName);
 
+        Print("[CallEvent] " + eventName + " called.");
         if (events)
         {
             for (int index = 0; index < events.Count(); index++)

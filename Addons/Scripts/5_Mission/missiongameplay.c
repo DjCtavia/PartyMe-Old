@@ -13,6 +13,11 @@ modded class MissionGameplay
         InitPartyMe();
     }
 
+    void ~MissionGameplay()
+    {
+        PM_GetGroup().Clear();
+    }
+
     void InitPartyMe()
     {
         m_pm_rpc_handler = new PM_RPC_C_handler;
