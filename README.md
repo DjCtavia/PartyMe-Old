@@ -1,6 +1,8 @@
 # PartyMe
 ## Currently WIP
 
+## Mod on Steam Workshop: [Link to steam](https://steamcommunity.com/sharedfiles/filedetails/?id=1582671564)
+
 ## Description
 
 **PartyMe** is a mod that was created for the game DayZ created by *Bohemia Interractive*. The language used is Enforce script.
