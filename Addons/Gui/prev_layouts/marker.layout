@@ -1,7 +1,7 @@
 FrameWidgetClass rootFrame {
  ignorepointer 1
  position 0 0
- size 96 80
+ size 96 42.5
  hexactpos 1
  vexactpos 1
  hexactsize 1
@@ -9,8 +9,8 @@ FrameWidgetClass rootFrame {
  {
   ImageWidgetClass i_logo {
    visible 1
-   position 32 31.5
-   size 32 32
+   position 38 22.5
+   size 20 20
    hexactpos 1
    vexactpos 1
    hexactsize 1

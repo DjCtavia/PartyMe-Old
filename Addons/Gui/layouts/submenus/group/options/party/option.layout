@@ -1,4 +1,4 @@
-FrameWidgetClass root {
+FrameWidgetClass rootFrame {
  position 0 0
  size 700 600
  hexactpos 1
@@ -6,21 +6,34 @@ FrameWidgetClass root {
  hexactsize 1
  vexactsize 1
  {
-  ScrollWidgetClass playerList {
-   ignorepointer 0
+  PanelWidgetClass topPanel {
+   ignorepointer 1
+   color 0.1294 0.1294 0.1412 0.502
    position 0 0
-   size 700 530
+   size 700 532
    hexactpos 1
    vexactpos 1
    hexactsize 1
    vexactsize 1
-   "Scrollbar V" 1
+   style rover_sim_colorable
+   {
+    ScrollWidgetClass playerList {
+     ignorepointer 1
+     position 0 0
+     size 700 532
+     hexactpos 1
+     vexactpos 1
+     hexactsize 1
+     vexactsize 1
+     "Scrollbar V" 1
+    }
+   }
   }
   PanelWidgetClass bottomPanel {
    ignorepointer 1
-   color 0.0941 0.0941 0.098 0.5882
-   position 0 530
-   size 700 70
+   color 0.0784 0.0784 0.0863 0.8
+   position 0 532
+   size 700 68
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -28,14 +41,47 @@ FrameWidgetClass root {
    style rover_sim_colorable
    {
     ButtonWidgetClass leaveParty {
-     position 25 10
-     size 200 48
+     position 482 10
+     size 206 44
      hexactpos 1
      vexactpos 1
      hexactsize 1
      vexactsize 1
-     text "Leave party"
-     font "gui/fonts/etelkatextpro16"
+     style Empty
+     {
+      PanelWidgetClass leavePartyBg {
+       ignorepointer 1
+       color 0.0627 0.0627 0.0667 1
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style rover_sim_colorable
+      }
+      ImageWidgetClass leavePartyIcon {
+       ignorepointer 1
+       position 162 0
+       size 44 44
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+      }
+      TextWidgetClass leavePartyText {
+       ignorepointer 1
+       position 12 0
+       size 150 44
+       hexactpos 1
+       vexactpos 1
+       hexactsize 1
+       vexactsize 1
+       text "Leave party"
+       font "gui/fonts/etelkatextpro16"
+       "text valign" center
+      }
+     }
     }
    }
   }
