@@ -22,7 +22,7 @@ Changes made:
 
 SOURCE: https://fonts.google.com/specimen/Varela#license"
 LICENCE: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
-FILE LICENCE: Addons\Gui\fonts\Varela-OFL.txt
+FILE LICENCE: Varela-OFL.txt
 Files used in these folders:
 		- Addons\Gui\fonts
 Files names:
