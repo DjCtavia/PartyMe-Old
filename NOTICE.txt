@@ -1,0 +1,29 @@
+SOURCE: https://material.io/resources/icons/?icon=autorenew&style=baseline
+LICENCE: under https://www.apache.org/licenses/LICENSE-2.0
+FILE LICENCE: LICENSE-2.0.txt
+Files used in these folders:
+		- Addons\Gui\images\options\icons
+Files names:
+		- accept.tga
+		- add.tga
+		- addplayer.tga
+		- decline.tga
+		- eye-unvisible.tga
+		- eye-visible.tga
+		- invitations.tga
+		- kick.tga
+		- leave.tga
+		- menu_active.tga
+		- party.tga
+		- players.tga	
+Changes made:
+		- The icons downloaded has been downloaded as PNG and modified as TGA.
+		- Name of icons has been renamed
+
+SOURCE: https://fonts.google.com/specimen/Varela#license"
+LICENCE: https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+FILE LICENCE: Addons\Gui\fonts\Varela-OFL.txt
+Files used in these folders:
+		- Addons\Gui\fonts
+Files names:
+		- Varela-Regular.ttf

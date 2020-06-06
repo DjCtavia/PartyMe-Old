@@ -29,3 +29,6 @@ There will be dynamic markers that show the position of a group member, as well 
 
 ### Even more
 Any chance of making the mod compatible with VanillaPlusMap?
+
+### Licences
+All the information concerning the licenses used, the modifications of files and other are located in the file: "NOTICE.txt".
