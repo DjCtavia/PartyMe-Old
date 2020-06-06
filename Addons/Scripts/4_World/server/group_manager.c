@@ -151,7 +151,7 @@ class PM_Group_Manager
 		
 		if (group)
 			return group.Count();
-		return 0;
+		return 1;
 	}
 
 	ref array<string> GetGroupMembersFromMember(string playerId)
@@ -258,7 +258,7 @@ class PM_Group_Manager
 		string ownerId = eventParams.playerIdTo;
 		string joiningId = eventParams.playerIdFrom;
 
-		Print("[PM][group_manager][OnPlayerJoinGroup] joinerId: " + joiningId + " | ownerId: " + ownerId);
+		Print("[PartyMe][group_manager][OnPlayerJoinGroup] joinerId: " + joiningId + " | ownerId: " + ownerId);
 		SetPlayerGroup(joiningId, ownerId);
 	}
 

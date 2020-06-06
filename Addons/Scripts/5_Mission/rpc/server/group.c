@@ -31,20 +31,9 @@ class PM_RPC_S_group
 		string owner2 = PM_GetGroupManager().GetPlayerGroupId(data.param2);
 		PlayerIdentity toKickIdentity;
 
-		Print("[PartyMe] Kick en cours !");
 		toKickIdentity = PM_GetGroupManager().GetPlayerIdentity(data.param2);
-		Print("[PartyMe][Kick] param1: " + data.param1);
-		Print("[PartyMe][Kick] param2: " + data.param2);
-		Print("[PartyMe][Kick] owner1: " + owner1);
-		Print("[PartyMe][Kick] owner2: " + owner2);
-		Print("[PartyMe][Kick] check 1: " + owner1 != string.Empty);
-		Print("[PartyMe][Kick] check 2: " + owner2 != string.Empty);
-		Print("[PartyMe][Kick] check 3: " + owner1 == owner2);
-		Print("[PartyMe][Kick] check 4: " + data.param1 == owner1);
-		Print("[PartyMe][Kick] check 5: " + toKickIdentity);
 		if (owner1 != string.Empty && owner2 != string.Empty && owner1 == owner2 && data.param1 == owner1 && toKickIdentity)
 		{
-			Print("[PartyMe] Kick sur " + data.param2 + " !");
 			PM_GetGroupManager().LeaveGroup(data.param2);
 			GetRPCManager().SendRPC("PartyMe", "GroupDestroyed", NULL, false, toKickIdentity);
 		}

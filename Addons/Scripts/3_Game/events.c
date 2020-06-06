@@ -96,7 +96,6 @@ class PM_events
                 {
                     string funcName = "On" + eventName;
                     auto paramsConverted = new Param1<ref PM_Event_Params>(params);
-                    Print("[PartyMe][Event] Called: " + funcName + " of " + inst.ToString());
                     GetGame().GameScript.CallFunctionParams(inst, funcName, NULL, paramsConverted);
                 }
                 else

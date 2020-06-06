@@ -13,7 +13,7 @@ class PM_RPC_C_handler
 	void AddRPC()
 	{
 		GetRPCManager().AddRPC("PartyMe", "PlayerJoinServer", this, SingleplayerExecutionType.Both);
-        GetRPCManager().AddRPC("PartyMe", "PlayerLeaveServer", this, SingleplayerExecutionType.Both);
+        GetRPCManager().AddRPC("PartyMe", "PlayerDisconnect", this, SingleplayerExecutionType.Both);
 	}
 
     /*
@@ -46,13 +46,13 @@ class PM_RPC_C_handler
         Event:
             playerIdFrom: ID of player leaving server
     */
-   void PlayerLeaveServer(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
+   void PlayerDisconnect(CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target)
    {
        Param1<string> data;
        if (!ctx.Read(data)) return;
 
        ref PM_Event_Params eventParams = new PM_Event_Params;
        eventParams.playerIdFrom = data.param1;
-       PM_GetEvents().CallEvent("PlayerLeaveServer", eventParams);
+       PM_GetEvents().CallEvent("PlayerDisconnect", eventParams);
    }
 };

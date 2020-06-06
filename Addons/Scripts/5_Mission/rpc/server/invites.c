@@ -44,8 +44,8 @@ class PM_RPC_S_invites
 		eventParams.playerIdFromIdentity = sender;
 		eventParams.answer = data.param2;
 		eventParams.playerIdTo = data.param1;
-        Print("[PM][group_manager][InvitationResponse][data] joinerId: " + sender.GetId() + " | ownerId: " + data.param1);
-        Print("[PM][group_manager][InvitationResponse][eventParams] joinerId: " + eventParams.playerIdFrom + " | ownerId: " + eventParams.playerIdTo);
+        Print("[PartyMe][group_manager][InvitationResponse][data] joinerId: " + sender.GetId() + " | ownerId: " + data.param1);
+        Print("[PartyMe][group_manager][InvitationResponse][eventParams] joinerId: " + eventParams.playerIdFrom + " | ownerId: " + eventParams.playerIdTo);
 		PM_GetEvents().CallEvent("InvitationResponse", eventParams);
     }
 };

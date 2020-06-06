@@ -28,7 +28,7 @@ class PM_Group
 		{
 			return true;
 		}
-        return true;
+        return false;
     }
 
     // Return if player is group leader
@@ -68,7 +68,7 @@ class PM_Group
             member.w_marker = new PM_Marker_Widget();
             member.isLocal = true;
             players.Set(id, member);
-            Print("[PartyMe] Joueur crée" + players.ToString());
+            Print("[PartyMe] Player created: " + players.ToString());
             return true;
         }
         return false;

@@ -29,7 +29,7 @@ class PM_Settings_Group
 		{
 			return false;
 		}
-		else if (numberOfPlayersInGroup < limit)
+		else if (numberOfPlayersInGroup <= limit)
 		{
 			return false;
 		}

@@ -33,12 +33,10 @@ modded class MissionServer
 	{
         super.InvokeOnDisconnect(player);
 
-        Print("[PartyMe] Player Disconnecting");
         if (player)
         {
             PlayerIdentity identity = player.GetIdentity();
 
-            Print("[PartyMe] Disco player get identity");
             if (identity)
             {
 				ref PM_Event_Params eventParams = new PM_Event_Params;
@@ -46,6 +44,7 @@ modded class MissionServer
 
                 Print("[PartyMe] Calling disconnect event");
 				PM_GetEvents().CallEvent("PlayerDisconnect", eventParams);
+                GetRPCManager().SendRPC("PartyMe", "PlayerDisconnect", new Param1<string>(identity.GetId()));
             }
         }
 	}

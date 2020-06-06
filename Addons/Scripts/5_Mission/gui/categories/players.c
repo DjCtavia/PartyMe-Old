@@ -51,7 +51,6 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
 		PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
 		PM_GetEvents().AddEvent("GroupDestroyed", this);
-		AddPlayer("12547922", "Joseph Joestar");
     }
 
 	/*
@@ -265,7 +264,6 @@ class PM_UI_party_PlayerWidget
 		auto params = new Param2<string, string>(PM_GetPlayerId(), m_playerId);
 		// Kick for the moment, need to edit later
 		GetRPCManager().SendRPC("PartyMe", "PlayerKickGroup", params);
-        Print("[PartyMe] Trying to kick: " + m_playerId);
     }
 
 	void ToggleMarker()

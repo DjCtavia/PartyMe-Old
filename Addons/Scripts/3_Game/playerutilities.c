@@ -12,7 +12,7 @@ class PM_PlayerUtilities
 	void AddEvents()
 	{
 		PM_GetEvents().AddEvent("PlayerJoinServer", this);
-		PM_GetEvents().AddEvent("PlayerLeaveServer", this);
+		PM_GetEvents().AddEvent("PlayerDisconnect", this);
 	}
 	
 	void InitPlayerIdentities()
@@ -66,7 +66,7 @@ class PM_PlayerUtilities
 		}
 	}
 	
-	void OnPlayerLeaveServer(ref PM_Event_Params eventParams)
+	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
 	{
 		m_playerIdentities.Remove(eventParams.playerIdFrom);
 	}

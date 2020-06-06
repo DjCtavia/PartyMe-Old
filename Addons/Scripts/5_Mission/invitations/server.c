@@ -13,12 +13,35 @@ class PM_S_Invitations extends PM_InvitationsHandler
 
 	override bool ConditionnalInvitation(string sender, string receiver)
 	{
-		// Check size of group
+		int groupSize = PM_GetGroupManager().GetGroupSize(sender);
+		
+		if (GetServerSettings().group.IsGroupFull(groupSize))
+			return false;
 		return true;
+	}
+
+	override void InvitePlayer(string sender, string receiver)
+	{
+		super.InvitePlayer(sender, receiver);
+		PlayerIdentity receiverIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(receiver);
+		PlayerIdentity senderIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(sender);
+		
+		if (HasInvited(sender, receiver))
+		{
+			if (senderIdentity && receiverIdentity)
+			{
+				GetRPCManager().SendRPC("PartyMe", "InvitationReceived", new Param2<string, string>(sender, senderIdentity.GetName()), false, receiverIdentity);
+			}
+			else if (!receiverIdentity && true) // debug mode
+			{
+				Print("[PartyMe][Error] " + sender + " tried to invite " + receiver + " but PlayerIdentity has not be found!");
+			}
+		}
 	}
 
 	override void AfterInvitation(string sender, string receiver)
 	{
+		super.AfterInvitation(sender, receiver);
 		PlayerIdentity receiverIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(receiver);
 		PlayerIdentity senderIdentity = MissionServer.Cast(GetGame().GetMission()).GetPlayerIdentity(sender);
 		
@@ -49,7 +72,7 @@ class PM_S_Invitations extends PM_InvitationsHandler
 		bool hasAccepted = eventParams.answer;
 		PlayerIdentity newMemberIdentity = PM_GetGroupManager().GetPlayerIdentity(receiver);
 
-		Print("[PM][group_manager][OnPlayerJoinGroup] joinerId: " + eventParams.playerIdFrom + " | ownerId: " + eventParams.playerIdTo);
+		Print("[PartyMe][group_manager][OnPlayerJoinGroup] joinerId: " + eventParams.playerIdFrom + " | ownerId: " + eventParams.playerIdTo);
 		if (hasAccepted && HasInvited(sender, receiver) && ConditionnalInvitation(sender, receiver))
 		{
 			Print("[PartyMe] " + receiver + " join group of " + sender);

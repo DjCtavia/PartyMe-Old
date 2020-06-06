@@ -52,7 +52,6 @@ class PM_Group_Position_Updater
         {
             // Tell server no more update is required [RPC]
             GetRPCManager().SendRPC("PartyMe", "RemovePlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
-            Print("[PM] Local player " + pInfos.id + " has been found!");
             pInfos.localPlayer = playerSelected;
             pInfos.isLocal = true;
         }
@@ -108,7 +107,6 @@ class PM_Group_Position_Updater
             {
                 // Ask server update [RPC]
                 GetRPCManager().SendRPC("PartyMe", "AskPlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
-                Print("[PM] Local player " + pInfos.id + " is missing...");
                 pInfos.isLocal = false;
             }
         }
@@ -133,7 +131,6 @@ class PM_Group_Position_Updater
             pInfos.isLocal = false;
             GetRPCManager().SendRPC("PartyMe", "AskPlayerPositionUpdate", new Param2<string, string>(playerId, pInfos.id));
         }
-        Print("[PM] Player died, localPlayer variable has been reset to NULL. Dead player id: " + data.param1);
     }
 };
 

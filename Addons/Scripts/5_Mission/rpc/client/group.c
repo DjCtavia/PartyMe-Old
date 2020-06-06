@@ -38,7 +38,6 @@ class PM_RPC_C_group
 		eventParams.name = data.param2;
 		eventParams.position = data.param3;
 		eventParams.health = data.param4;
-		Print("[PartyMe][RPC] PlayerJoinGroup | " + eventParams.playerIdFrom + " | " + eventParams.name + " | " + eventParams.position + " | " + eventParams.health);
 		PM_GetEvents().CallEvent("PlayerJoinGroup", eventParams);
     }
 

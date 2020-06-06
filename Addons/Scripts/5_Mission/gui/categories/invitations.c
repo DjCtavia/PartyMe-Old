@@ -249,7 +249,6 @@ class PM_UI_invitations_PlayerWidget
 		auto params = new Param2<string, bool>(m_playerId, response);
 		string playerId;
 
-		Print("[PartyMe][UI]PlayerInvite widget sending RPC");
 		GetRPCManager().SendRPC("PartyMe", "InvitationResponse", params);
 		if (mission && PM_GetPlayerId(playerId))
 			mission.m_pm_invitations.RemovePlayerInvite(m_playerId, playerId);

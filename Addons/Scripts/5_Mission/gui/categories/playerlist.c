@@ -44,7 +44,7 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
         Init();
 		InitPlayerList();
         PM_GetEvents().AddEvent("PlayerJoinServer", this);
-		PM_GetEvents().AddEvent("PlayerLeaveServer", this);
+		PM_GetEvents().AddEvent("PlayerDisconnect", this);
     }
 
     override void GetWidgets()
@@ -134,7 +134,7 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
 		AddPlayer(eventParams.playerIdFrom, eventParams.name);
     }
 	
-	void OnPlayerLeaveServer(ref PM_Event_Params eventParams)
+	void OnPlayerDisconnect(ref PM_Event_Params eventParams)
     {
 		RemovePlayer(eventParams.playerIdFrom);
     }

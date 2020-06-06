@@ -10,12 +10,6 @@ class PM_C_Invitations extends PM_InvitationsHandler
 		PM_GetEvents().AddEvent("InvitationReceived", this);
 		PM_GetEvents().AddEvent("InvitationResponse", this);
 	}
-
-	override bool ConditionnalInvitation(string sender, string receiver)
-	{
-		// Check size of group
-		return true;
-	}
 	
 	override void AfterInvitation(string sender, string receiver)
 	{

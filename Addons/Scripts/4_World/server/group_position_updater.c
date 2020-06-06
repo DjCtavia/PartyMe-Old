@@ -10,12 +10,12 @@ class PM_Server_Group_Position_Updater
         timer.CallLater(Update, 1250, true);
 		AddEvents();
         AddRPCs();
-        Print("[PM] PM_Group_Position_Updater_Server created");
+        Print("[PartyMe] PM_Group_Position_Updater_Server created");
     }
 
     void ~PM_Server_Group_Position_Updater()
     {
-        Print("[PM] PM_Group_Position_Updater_Server destroyed");
+        Print("[PartyMe] PM_Group_Position_Updater_Server destroyed");
     }
 	
 	private void AddEvents()
@@ -124,7 +124,7 @@ class PM_Server_Group_Position_Updater
     {
 		if (identity)
 		{
-        	Print("[PM] Position of " + playerDataId + " has been sent through RPC to " + identity.GetId());
+        	Print("[PartyMe] Position of " + playerDataId + " has been sent through RPC to " + identity.GetId());
         	GetRPCManager().SendRPC("PartyMe", "UpdatePlayerPositionNetwork", new Param2<string, vector>(playerDataId, position), false, identity);
 		}
     }
