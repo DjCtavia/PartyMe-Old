@@ -98,8 +98,10 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 
     void AddPlayer(string playerId, string playerName)
     {
+        Print("[PartyMe] Trying to add player to invitations list! " + FindPlayer(playerId));
         if (FindPlayer(playerId) == -1)
         {
+            Print("[PartyMe] Adding player to invitations list!");
             auto playerWidget = new PM_UI_invitations_PlayerWidget(m_scroll_playerList, playerId, playerName);
             int pos = m_players.Count();
             m_players.Insert(playerWidget);
@@ -144,6 +146,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 		string playerId = eventParams.playerIdFrom;
 		string name = eventParams.name;
 
+        Print("Invitation received from: " + playerId + "(" + name + ")");
 		AddPlayer(playerId, name);
 	}
 	

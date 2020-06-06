@@ -10,7 +10,12 @@ class PM_C_Invitations extends PM_InvitationsHandler
 		PM_GetEvents().AddEvent("InvitationReceived", this);
 		PM_GetEvents().AddEvent("InvitationResponse", this);
 	}
-	
+
+	override bool ConditionnalInvitation(string sender, string receiver)
+	{
+		return true;
+	}
+
 	override void AfterInvitation(string sender, string receiver)
 	{
 		ref PM_Event_Params eventParams = new PM_Event_Params;
