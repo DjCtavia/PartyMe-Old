@@ -51,6 +51,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         PM_GetEvents().AddEvent("PlayerJoinGroup", this);
 		PM_GetEvents().AddEvent("PlayerLeaveGroup", this);
 		PM_GetEvents().AddEvent("GroupDestroyed", this);
+		AddPlayer("12547922", "Joseph Joestar");
     }
 
 	/*
@@ -177,16 +178,16 @@ class PM_UI_Menu_Party extends PM_UI_Menu
 
 class PM_UI_party_PlayerWidget
 {
-    private static const string DEFAULT_LAYOUT          = "partyme/gui/layouts/submenus/group/options/party/widgets/player.layout";
-    private static const string ICON_MORE_OPTIONS       = "partyme/gui/images/options/icons/arrow.tga";
-    private static const string ICON_SHOWHIDE_MARKER    = "partyme/gui/images/options/icons/eye.tga";
+    private static const string DEFAULT_LAYOUT			= "partyme/gui/layouts/submenus/group/options/party/widgets/player.layout";
+    private static const string ICON_SHOW_MARKER		= "partyme/gui/images/options/icons/eye-visible.tga";
+	private static const string ICON_HIDE_MARKER		= "partyme/gui/images/options/icons/eye-unvisible.tga";
+    private static const string ICON_KICK				= "partyme/gui/images/options/icons/kick.tga";
+
     Widget                                              m_w_parent;
     Widget                                              m_w_root;
     TextWidget                                          m_txt_playerName;
-    ButtonWidget                                        m_btn_SHMarker;
-    ButtonWidget                                        m_btn_leadOptions;
-    ImageWidget                                         m_img_SHMarker;
-    ImageWidget                                         m_img_leadOptions;
+	ref PM_widget_smallbutton								m_b_marker;
+	ref PM_widget_smallbutton								m_b_kick;
 
     string                                              m_playerId;
 	string                                              m_playerName;
@@ -198,7 +199,6 @@ class PM_UI_party_PlayerWidget
 		m_w_parent = master;
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, parent);
         GetWidgets();
-        InitIcons();
         RetrievePlayerInfos();
     }
 
@@ -210,21 +210,18 @@ class PM_UI_party_PlayerWidget
     void GetWidgets()
     {
         m_txt_playerName = TextWidget.Cast(m_w_root.FindAnyWidget("playerName"));
-        m_btn_SHMarker = ButtonWidget.Cast(m_w_root.FindAnyWidget("SHMarker"));
-        m_btn_leadOptions = ButtonWidget.Cast(m_w_root.FindAnyWidget("leadOptions"));
-        m_img_SHMarker = ImageWidget.Cast(m_w_root.FindAnyWidget("SHMarkerImage"));
-        m_img_leadOptions = ImageWidget.Cast(m_w_root.FindAnyWidget("leadOptionsImage"));
-    }
-
-    void InitIcons()
-    {
-        m_img_SHMarker.LoadImageFile(0, ICON_SHOWHIDE_MARKER);
-        m_img_leadOptions.LoadImageFile(0, ICON_MORE_OPTIONS);
+		m_b_marker = new PM_widget_smallbutton(m_w_root, ICON_SHOW_MARKER, 1052689, 1, 16777215, 1);
+		m_b_marker.SetPos(524, 6);
+		m_b_marker.SetToggleIcon(ICON_HIDE_MARKER);
+		m_b_kick = new PM_widget_smallbutton(m_w_root, ICON_KICK, 1052689, 1, 16777215, 1);
+		m_b_kick.SetPos(574, 6);
+		m_b_kick.SetBackgroundDisable(1052689, 0.5);
+		m_b_kick.SetIconDisable(3750202, 1);
     }
 	
 	void SetPosition(int index)
     {
-        m_w_root.SetPos(50, (40 + 65 * index));
+        m_w_root.SetPos(50, (32 + 72 * index));
     }
 
     //--------------------------------------------------------------------------
@@ -249,37 +246,34 @@ class PM_UI_party_PlayerWidget
     {
         if (button == MouseState.LEFT)
         {
-			if (OpenLeadOptions(w)) return true;
-			if (ToggleMarker(w)) return true;
+			if (m_b_marker.OnClick(w, x, y, button))
+			{
+				OpenLeadOptions();
+				return true;
+			}
+			if (m_b_kick.OnClick(w, x, y, button))
+			{
+				ToggleMarker();
+				return true;
+			}
         }
        return false;
     }
     //-------------------------------------------------------------------------- UI Events Functions
-    bool OpenLeadOptions(Widget w)
+    void OpenLeadOptions()
     {
-		if (w != m_btn_leadOptions)
-			return false;
 		auto params = new Param2<string, string>(PM_GetPlayerId(), m_playerId);
 		// Kick for the moment, need to edit later
 		GetRPCManager().SendRPC("PartyMe", "PlayerKickGroup", params);
         Print("[PartyMe] Trying to kick: " + m_playerId);
-		return true;
     }
 
-	bool ToggleMarker(Widget w)
+	void ToggleMarker()
 	{
-		if (w != m_btn_SHMarker)
-			return false;
 		ref PM_Player_Infos_t pInfos = PM_GetGroup().players.Get(m_playerId);
 		
 		if (!pInfos)
-			return true;
+			return;
 		pInfos.w_marker.SetVisible(!pInfos.w_marker.IsVisible());
-		return true;
 	}
-};
-
-class PM_UI_LeadOptions
-{
-
 };
