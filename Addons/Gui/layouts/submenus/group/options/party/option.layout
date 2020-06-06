@@ -68,6 +68,10 @@ FrameWidgetClass rootFrame {
        vexactpos 1
        hexactsize 1
        vexactsize 1
+       mode blend
+       "src alpha" 1
+       stretch 1
+       filter 0
       }
       TextWidgetClass leavePartyText {
        ignorepointer 1
@@ -78,7 +82,7 @@ FrameWidgetClass rootFrame {
        hexactsize 1
        vexactsize 1
        text "Leave party"
-       font "gui/fonts/etelkatextpro16"
+       font "partyme/gui/fonts/varela/varela16"
        "text valign" center
       }
      }

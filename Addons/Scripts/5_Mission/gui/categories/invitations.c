@@ -2,7 +2,7 @@ class PM_UI_Option_Invitations extends PM_UI_Category
 {
     void PM_UI_Option_Invitations(Widget parent, int index)
     {
-        m_icon = "partyme/gui/images/options/icons/letter.tga";
+        m_icon = "partyme/gui/images/options/icons/invitations.tga";
         m_w_parent = parent;
         Init(index);
     }

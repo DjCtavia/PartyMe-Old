@@ -1,0 +1,62 @@
+ButtonWidgetClass root {
+ position 0 16
+ size 206 48
+ halign center_ref
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ style Empty
+ {
+  PanelWidgetClass background {
+   visible 0
+   ignorepointer 1
+   color 0.1294 0.1294 0.1412 1
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+  }
+  ImageWidgetClass icon {
+   ignorepointer 1
+   position 0 0
+   size 48 48
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   mode blend
+   "src alpha" 1
+   stretch 1
+   filter 0
+  }
+  TextWidgetClass text {
+   ignorepointer 1
+   position 48 0
+   size 110 48
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "Default"
+   font "partyme/gui/fonts/varela/varela16"
+   "text valign" center
+  }
+  ImageWidgetClass isActive {
+   ignorepointer 1
+   position 158 0
+   size 48 48
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   mode blend
+   "src alpha" 1
+   stretch 1
+   filter 0
+  }
+ }
+}

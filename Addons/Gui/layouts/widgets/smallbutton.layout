@@ -1,0 +1,34 @@
+ButtonWidgetClass root {
+ position 0 0
+ size 44 44
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+  PanelWidgetClass background {
+   ignorepointer 1
+   color 0 0 0 0
+   position 0 0
+   size 44 44
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   style rover_sim_colorable
+  }
+  ImageWidgetClass icon {
+   ignorepointer 1
+   position 0 0
+   size 44 44
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   mode blend
+   "src alpha" 1
+   stretch 1
+   filter 0
+  }
+ }
+}

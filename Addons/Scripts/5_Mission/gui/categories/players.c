@@ -33,8 +33,11 @@ class PM_UI_Option_Party extends PM_UI_Category
 
 class PM_UI_Menu_Party extends PM_UI_Menu
 {
+	private static const string ICON_LEAVE    = "partyme/gui/images/options/icons/leave.tga";
+
     protected ScrollWidget                          	m_scroll_playerList;
     protected ButtonWidget                          	m_btn_leaveParty;
+	protected ImageWidget								m_img_leaveParty
 
     protected ref array<ref PM_UI_party_PlayerWidget>	m_players;
 
@@ -76,7 +79,14 @@ class PM_UI_Menu_Party extends PM_UI_Menu
         super.GetWidgets();
         m_scroll_playerList = ScrollWidget.Cast(m_w_root.FindAnyWidget("playerList"));
         m_btn_leaveParty = ButtonWidget.Cast(m_w_root.FindAnyWidget("leaveParty"));
+		m_img_leaveParty = ImageWidget.Cast(m_w_root.FindAnyWidget("leavePartyIcon"));
     }
+
+	override void ConfigureWidget()
+	{
+		super.ConfigureWidget();
+		m_img_leaveParty.LoadImageFile(0, ICON_LEAVE);
+	}
 
     int FindPlayer(string playerId)
     {

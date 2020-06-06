@@ -2,7 +2,7 @@ class PM_UI_Option_Playerlist extends PM_UI_Category
 {
     void PM_UI_Option_Playerlist(Widget parent, int index)
     {
-        m_icon = "partyme/gui/images/options/icons/player.tga";
+        m_icon = "partyme/gui/images/options/icons/players.tga";
         m_w_parent = parent;
         Init(index);
     }

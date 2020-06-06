@@ -1,7 +1,7 @@
 class PM_UI_Category
 {
     private static const string DEFAULT_LAYOUT      = "partyme/gui/layouts/widgets/menuoption.layout";
-    private static const string ICON_ISACTIVE       = "partyme/gui/images/options/icons/arrow.tga";
+    private static const string ICON_ISACTIVE       = "partyme/gui/images/options/icons/menu_active.tga";
     protected int                                   m_categoryIndex;
 
     protected string                                m_icon;
@@ -9,6 +9,7 @@ class PM_UI_Category
     protected Widget                                m_w_scrollMenu;
 
     protected Widget                                m_w_root;
+	protected Widget								m_w_background;
     protected ImageWidget                           m_img_icon;
     protected TextWidget                            m_txt_optionName;
     protected ImageWidget                           m_img_isActive;
@@ -21,14 +22,15 @@ class PM_UI_Category
         GetWidgets();
         ConfigureWidget();
 
-        m_w_root.SetPos(0, (20 + 58 * index));
+        m_w_root.SetPos(0, (16 + 60 * index));
     }
 
     void GetWidgets()
     {
         m_w_scrollMenu = m_w_parent.FindAnyWidget("ScrollMenu");
         m_w_root = GetGame().GetWorkspace().CreateWidgets(DEFAULT_LAYOUT, m_w_scrollMenu);
-        m_img_icon = ImageWidget.Cast(m_w_root.FindAnyWidget("image"));
+		m_w_background = m_w_root.FindAnyWidget("background");
+        m_img_icon = ImageWidget.Cast(m_w_root.FindAnyWidget("icon"));
         m_txt_optionName = TextWidget.Cast(m_w_root.FindAnyWidget("text"));
         m_img_isActive = ImageWidget.Cast(m_w_root.FindAnyWidget("isActive"));
     }
@@ -37,11 +39,14 @@ class PM_UI_Category
     void ConfigureWidget()
     {
         m_img_icon.LoadImageFile(0, m_icon);
+		m_img_isActive.LoadImageFile(0, ICON_ISACTIVE);
     }
 
     void Show(bool isVisible)
     {
         m_menu.Show(isVisible);
+		m_w_background.Show(isVisible);
+		m_img_isActive.Show(isVisible);
     }
 
     bool OnClick(Widget w, int x, int y, int button)
@@ -102,6 +107,7 @@ class PM_UI_Menu
     {
         m_w_menu = m_w_parent.FindAnyWidget("Menu");
         GetWidgets();
+		ConfigureWidget();
     }
 
     void Show(bool isVisible)
@@ -120,6 +126,9 @@ class PM_UI_Menu
     {
         m_w_root = GetGame().GetWorkspace().CreateWidgets(m_layoutPath, m_w_menu);
     }
+	
+	// To override
+    void ConfigureWidget() {};
 
     bool OnClick(Widget w, int x, int y, int button)
     {
