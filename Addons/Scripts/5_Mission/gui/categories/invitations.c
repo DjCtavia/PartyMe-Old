@@ -38,7 +38,7 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 
     void PM_UI_Menu_Invitations(Widget parent)
     {
-        m_layoutPath = "partyme/gui/layouts/submenus/invitations/options/option.layout";
+        m_layoutPath = "partyme/gui/layouts/submenus/invitations/option.layout";
         m_w_parent = parent;
         m_players = new array<ref PM_UI_invitations_PlayerWidget>;
         Init();
@@ -166,16 +166,14 @@ class PM_UI_Menu_Invitations extends PM_UI_Menu
 
 class PM_UI_invitations_PlayerWidget
 {
-    private static const string DEFAULT_LAYOUT              = "partyme/gui/layouts/submenus/invitations/options/widgets/player.layout";
+    private static const string DEFAULT_LAYOUT              = "partyme/gui/layouts/submenus/invitations/widgets/player.layout";
     private static const string ICON_ACCEPT                 = "partyme/gui/images/options/icons/accept.tga";
     private static const string ICON_DECLINE                = "partyme/gui/images/options/icons/decline.tga";
 
     private Widget                                          m_w_root;
     private TextWidget                                      m_txt_playerName;
-    private ButtonWidget                                    m_btn_accept;
-    private ButtonWidget                                    m_btn_decline;
-    private ImageWidget                                     m_img_accept;
-    private ImageWidget                                     m_img_decline;
+    ref PM_widget_smallbutton							    m_b_accept;
+	ref PM_widget_smallbutton							    m_b_decline;
 
     private string                                          m_playerId;
     private string                                          m_playerName;
@@ -198,27 +196,20 @@ class PM_UI_invitations_PlayerWidget
     private void GetWidgets()
     {
         m_txt_playerName = TextWidget.Cast(m_w_root.FindAnyWidget("playerName"));
-        m_btn_accept = ButtonWidget.Cast(m_w_root.FindAnyWidget("accept"));
-        m_btn_decline = ButtonWidget.Cast(m_w_root.FindAnyWidget("decline"));
-        m_img_accept = ImageWidget.Cast(m_w_root.FindAnyWidget("acceptLogo"));
-        m_img_decline = ImageWidget.Cast(m_w_root.FindAnyWidget("declineLogo"));
+        m_b_accept = new PM_widget_smallbutton(m_w_root, ICON_ACCEPT, 1052689, 1, 16777215, 1);
+        m_b_accept.SetPos(524, 6);
+        m_b_decline = new PM_widget_smallbutton(m_w_root, ICON_DECLINE, 1052689, 1, 16777215, 1);
+        m_b_decline.SetPos(574, 6);
     }
 
     private void ConfigWidgets()
     {
         m_txt_playerName.SetText(m_playerName);
-        InitIcons();
-    }
-
-    private void InitIcons()
-    {
-        m_img_accept.LoadImageFile(0, ICON_ACCEPT);
-        m_img_decline.LoadImageFile(0, ICON_DECLINE);
     }
 
     void SetPosition(int index)
     {
-        m_w_root.SetPos(50, (40 + 65 * index));
+        m_w_root.SetPos(36, (32 + 72 * index));
     }
 
     //-------------------------------------------------------------------------- Getters
@@ -237,12 +228,12 @@ class PM_UI_invitations_PlayerWidget
     {
 		if (button == MouseState.LEFT)
 		{
-			if (w == m_btn_accept)
+			if (m_b_accept.OnClick(w, x, y, button))
 			{
 				InvitationResponse(true);
 				return true;
 			}
-			if (w == m_btn_decline)
+			if (m_b_decline.OnClick(w, x, y, button))
 			{
 				InvitationResponse(false);
 				return true;

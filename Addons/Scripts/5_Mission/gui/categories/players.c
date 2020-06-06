@@ -43,7 +43,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
 
     void PM_UI_Menu_Party(Widget parent)
     {
-        m_layoutPath = "partyme/gui/layouts/submenus/group/options/party/option.layout";
+        m_layoutPath = "partyme/gui/layouts/submenus/group/option.layout";
         m_w_parent = parent;
         m_players = new array<ref PM_UI_party_PlayerWidget>;
         Init();
@@ -178,7 +178,7 @@ class PM_UI_Menu_Party extends PM_UI_Menu
 
 class PM_UI_party_PlayerWidget
 {
-    private static const string DEFAULT_LAYOUT			= "partyme/gui/layouts/submenus/group/options/party/widgets/player.layout";
+    private static const string DEFAULT_LAYOUT			= "partyme/gui/layouts/submenus/group/widgets/player.layout";
     private static const string ICON_SHOW_MARKER		= "partyme/gui/images/options/icons/eye-visible.tga";
 	private static const string ICON_HIDE_MARKER		= "partyme/gui/images/options/icons/eye-unvisible.tga";
     private static const string ICON_KICK				= "partyme/gui/images/options/icons/kick.tga";
@@ -186,8 +186,8 @@ class PM_UI_party_PlayerWidget
     Widget                                              m_w_parent;
     Widget                                              m_w_root;
     TextWidget                                          m_txt_playerName;
-	ref PM_widget_smallbutton								m_b_marker;
-	ref PM_widget_smallbutton								m_b_kick;
+	ref PM_widget_smallbutton							m_b_marker;
+	ref PM_widget_smallbutton							m_b_kick;
 
     string                                              m_playerId;
 	string                                              m_playerName;
@@ -221,7 +221,7 @@ class PM_UI_party_PlayerWidget
 	
 	void SetPosition(int index)
     {
-        m_w_root.SetPos(50, (32 + 72 * index));
+        m_w_root.SetPos(36, (32 + 72 * index));
     }
 
     //--------------------------------------------------------------------------
@@ -248,12 +248,12 @@ class PM_UI_party_PlayerWidget
         {
 			if (m_b_marker.OnClick(w, x, y, button))
 			{
-				OpenLeadOptions();
+				ToggleMarker();
 				return true;
 			}
 			if (m_b_kick.OnClick(w, x, y, button))
 			{
-				ToggleMarker();
+				OpenLeadOptions();
 				return true;
 			}
         }

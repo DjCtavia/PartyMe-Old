@@ -85,10 +85,11 @@ class PM_widget_smallbutton
 	}
 
 	//-------------------------------------------------------------------------- Setters
-	void SetActive(bool isActive)
+	void Enable(bool isActive)
 	{
 		m_isActive = isActive;
 
+		m_w_root.Enable(isActive);
 		if (isActive)
 		{
 			m_w_background.SetColor(m_backgroundColor);

@@ -38,7 +38,7 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
 
     void PM_UI_Menu_Playerlist(Widget parent)
     {
-        m_layoutPath = "partyme/gui/layouts/submenus/playerlist/options/option.layout";
+        m_layoutPath = "partyme/gui/layouts/submenus/playerlist/option.layout";
         m_w_parent = parent;
         m_players = new array<ref PM_UI_playerlist_PlayerWidget>;
         Init();
@@ -158,13 +158,12 @@ class PM_UI_Menu_Playerlist extends PM_UI_Menu
 class PM_UI_playerlist_PlayerWidget
 {
     private static const int INVITE_DELAY                   = 2000;
-    private static const string DEFAULT_LAYOUT              = "partyme/gui/layouts/submenus/playerlist/options/widgets/player.layout";
-    private static const string ICON_INVITE                 = "partyme/gui/images/options/icons/invite.tga";
+    private static const string DEFAULT_LAYOUT              = "partyme/gui/layouts/submenus/playerlist/widgets/player.layout";
+    private static const string ICON_INVITE                 = "partyme/gui/images/options/icons/add.tga";
 
     private Widget                                          m_w_root;
     private TextWidget                                      m_txt_playerName;
-    private ButtonWidget                                    m_btn_invite;
-    private ImageWidget                                     m_img_invite;
+    ref PM_widget_smallbutton							    m_b_invite;
 
     private string                                          m_playerId;
     private string                                          m_playerName;
@@ -182,33 +181,26 @@ class PM_UI_playerlist_PlayerWidget
 
     private void GetWidgets()
     {
-        m_btn_invite = ButtonWidget.Cast(m_w_root.FindAnyWidget("invite"));
+        m_b_invite = new PM_widget_smallbutton(m_w_root, ICON_INVITE, 1052689, 1, 16777215, 1);
+        m_b_invite.SetPos(574, 6);
+        m_b_invite.SetBackgroundDisable(1052689, 0.5);
+		m_b_invite.SetIconDisable(3750202, 1);
         m_txt_playerName = TextWidget.Cast(m_w_root.FindAnyWidget("playerName"));
-        m_img_invite = ImageWidget.Cast(m_w_root.FindAnyWidget("logo"));
-
     }
 
     private void ConfigWidgets()
     {
         m_txt_playerName.SetText(m_playerName);
-        InitIcons();
-    }
-
-    private void InitIcons()
-    {
-        m_img_invite.LoadImageFile(0, ICON_INVITE);
     }
 
     void SetPosition(int index)
     {
-        m_w_root.SetPos(50, (40 + 65 * index));
+        m_w_root.SetPos(36, (32 + 72 * index));
     }
 
     private void EnableInviteButton(bool isEnable)
     {
-        m_btn_invite.Enable(isEnable);
-		m_btn_invite.Show(isEnable);
-        m_img_invite.Show(isEnable);
+        m_b_invite.Enable(isEnable);
     }
 	
 	void Destroy()
@@ -232,7 +224,7 @@ class PM_UI_playerlist_PlayerWidget
     {
         if (button == MouseState.LEFT)
         {
-            if (w == m_btn_invite && m_canInvite && PM_GetGroup().CanInvite())
+            if (m_b_invite.OnClick(w, x, y, button) && m_canInvite && PM_GetGroup().CanInvite())
             {
                 Invite();
                 return true;
