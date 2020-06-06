@@ -1,0 +1,39 @@
+FrameWidgetClass rootFrame {
+ ignorepointer 1
+ position 0 0
+ size 96 42.5
+ hexactpos 1
+ vexactpos 1
+ hexactsize 1
+ vexactsize 1
+ {
+  ImageWidgetClass i_logo {
+   visible 1
+   position 38 22.5
+   size 20 20
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   imageTexture "{D70B9132D04BF14C}partyme/gui/images/marker/ally.tga"
+   mode blend
+   "src alpha" 1
+   stretch 1
+   filter 0
+   Progress 0
+  }
+  MultilineTextWidgetClass t_playerName {
+   position 0 0
+   size 96 15
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   text "DjCtavia"
+   font "partyme/gui/fonts/varela/varela64"
+   "text halign" center
+   "text valign" center
+   wrap 1
+  }
+ }
+}

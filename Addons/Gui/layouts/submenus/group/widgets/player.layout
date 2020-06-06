@@ -8,7 +8,7 @@ PanelWidgetClass root {
  vexactsize 1
  style rover_sim_colorable
  {
-  TextWidgetClass TextWidget0 {
+  TextWidgetClass playerName {
    ignorepointer 1
    position 16 6
    size 400 44

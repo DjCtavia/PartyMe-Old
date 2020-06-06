@@ -10,7 +10,7 @@ FrameWidgetClass rootFrame {
    ignorepointer 1
    color 0.1294 0.1294 0.1412 0.502
    position 0 0
-   size 700 532
+   size 700 600
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -18,7 +18,7 @@ FrameWidgetClass rootFrame {
    style rover_sim_colorable
    {
     ScrollWidgetClass playerList {
-     ignorepointer 1
+     ignorepointer 0
      position 0 0
      size 700 532
      hexactpos 1
@@ -41,7 +41,7 @@ FrameWidgetClass rootFrame {
    style rover_sim_colorable
    {
     ButtonWidgetClass leaveParty {
-     position 482 10
+     position 482 12
      size 206 44
      hexactpos 1
      vexactpos 1
@@ -74,6 +74,7 @@ FrameWidgetClass rootFrame {
        filter 0
       }
       TextWidgetClass leavePartyText {
+       disabled 0
        ignorepointer 1
        position 12 0
        size 150 44
