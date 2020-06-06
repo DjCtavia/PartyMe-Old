@@ -1,0 +1,16 @@
+MetaFileClass {
+ Name "{D9B1DA065A1C1308}Mods/@PartyMe/Addons/Gui/fonts/varela/varela42.edds"
+ Author "djctavia"
+ ChangeDate 40609990
+ Configurations {
+  TGAResourceClass PC {
+   SourceFile "varela42.tga"
+  }
+  TGAResourceClass XBOX_ONE : PC {
+  }
+  TGAResourceClass PS4 : PC {
+  }
+  TGAResourceClass LINUX : PC {
+  }
+ }
+}

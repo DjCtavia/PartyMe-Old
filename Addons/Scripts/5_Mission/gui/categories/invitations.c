@@ -209,7 +209,7 @@ class PM_UI_invitations_PlayerWidget
 
     void SetPosition(int index)
     {
-        m_w_root.SetPos(36, (32 + 72 * index));
+        m_w_root.SetPos(34, (32 + 72 * index));
     }
 
     //-------------------------------------------------------------------------- Getters

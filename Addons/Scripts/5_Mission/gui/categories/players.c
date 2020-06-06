@@ -221,7 +221,7 @@ class PM_UI_party_PlayerWidget
 	
 	void SetPosition(int index)
     {
-        m_w_root.SetPos(36, (32 + 72 * index));
+        m_w_root.SetPos(34, (32 + 72 * index));
     }
 
     //--------------------------------------------------------------------------
