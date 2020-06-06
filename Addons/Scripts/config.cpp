@@ -23,7 +23,7 @@ class CfgMods
 		hideName = 1;
 		hidePicture = 1;
 		name = "Party Me";
-		credits = "OP, Baroness, GrosTon1, Thurston";
+		credits = "Hank Moody, OP, Baroness, GrosTon1, Thurston";
 		author = "DjCtavia";
 		authorID = "0"; 
 		version = "7"; 
