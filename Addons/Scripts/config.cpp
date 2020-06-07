@@ -26,7 +26,7 @@ class CfgMods
 		credits = "Hank Moody, OP, Baroness, GrosTon1, Thurston";
 		author = "DjCtavia";
 		authorID = "0"; 
-		version = "7"; 
+		version = "1.0.1"; 
 		extra = 0;
 		type = "mod";
 		inputs = "partyme/scripts/partyme_inputs.xml";

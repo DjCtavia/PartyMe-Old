@@ -10,6 +10,7 @@ modded class MissionServer
 
     void InitPartyMe()
     {
+        GetServerSettings();
         m_pm_rpc_handler = new PM_RPC_S_handler;
 		m_pm_invitations = new PM_S_Invitations;
         PM_GetGroupManager();
