@@ -6,6 +6,7 @@ PanelWidgetClass rootFrame {
  vexactpos 1
  hexactsize 1
  vexactsize 1
+ scaled 0
  style rover_sim_colorable
  {
   TextWidgetClass playerName {
@@ -16,6 +17,7 @@ PanelWidgetClass rootFrame {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    text "PlayerName"
    font "partyme/gui/fonts/varela/varela16"
    "text valign" center

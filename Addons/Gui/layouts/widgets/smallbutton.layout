@@ -5,6 +5,7 @@ ButtonWidgetClass root {
  vexactpos 1
  hexactsize 1
  vexactsize 1
+ scaled 0
  {
   PanelWidgetClass background {
    ignorepointer 1
@@ -15,6 +16,7 @@ ButtonWidgetClass root {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    style rover_sim_colorable
   }
   ImageWidgetClass icon {
@@ -25,6 +27,7 @@ ButtonWidgetClass root {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    mode blend
    "src alpha" 1
    stretch 1

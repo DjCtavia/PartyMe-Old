@@ -5,6 +5,7 @@ FrameWidgetClass rootFrame {
  vexactpos 1
  hexactsize 1
  vexactsize 1
+ scaled 0
  {
   PanelWidgetClass topPanel {
    ignorepointer 1
@@ -15,6 +16,7 @@ FrameWidgetClass rootFrame {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    style rover_sim_colorable
    {
     ScrollWidgetClass playerList {
@@ -25,6 +27,7 @@ FrameWidgetClass rootFrame {
      vexactpos 1
      hexactsize 1
      vexactsize 1
+     scaled 0
      "Scrollbar V" 1
     }
    }
@@ -38,6 +41,7 @@ FrameWidgetClass rootFrame {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    style rover_sim_colorable
    {
     ButtonWidgetClass leaveParty {
@@ -47,6 +51,7 @@ FrameWidgetClass rootFrame {
      vexactpos 1
      hexactsize 1
      vexactsize 1
+     scaled 0
      style Empty
      {
       PanelWidgetClass leavePartyBg {
@@ -58,6 +63,7 @@ FrameWidgetClass rootFrame {
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       scaled 0
        style rover_sim_colorable
       }
       ImageWidgetClass leavePartyIcon {
@@ -68,6 +74,7 @@ FrameWidgetClass rootFrame {
        vexactpos 1
        hexactsize 1
        vexactsize 1
+       scaled 0
        mode blend
        "src alpha" 1
        stretch 1
@@ -82,6 +89,7 @@ FrameWidgetClass rootFrame {
        vexactpos 1
        hexactsize 1
        vexactsize 1
+       scaled 0
        text "Leave party"
        font "partyme/gui/fonts/varela/varela16"
        "text valign" center

@@ -6,6 +6,7 @@ FrameWidgetClass rootFrame {
  vexactpos 1
  hexactsize 1
  vexactsize 1
+ scaled 0
  {
   PanelWidgetClass background {
    ignorepointer 1
@@ -16,6 +17,7 @@ FrameWidgetClass rootFrame {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    style rover_sim_colorable
   }
   ScrollWidgetClass playerList {
@@ -26,6 +28,7 @@ FrameWidgetClass rootFrame {
    vexactpos 1
    hexactsize 1
    vexactsize 1
+   scaled 0
    style blank
    "Scrollbar V" 1
   }
